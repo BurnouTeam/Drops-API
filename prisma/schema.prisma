@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        Int      @default(autoincrement()) @id
+  email     String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  users     User[]
+  clients   Client[]
+  products  Product[]
+  orders    Order[]
+  roles     Role[]
+}
+
+model Role {
+  id             Int          @id @default(autoincrement())
+  name           String
+  organizationId Int
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  users          User[]
+  permissions    Permission[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())   @updatedAt
+
+  @@unique([name,organizationId])
+}
+model Permission {
+  id    Int    @id                   @default(autoincrement())
+  name  String @unique
+  roles Role[]
+}
+
+model User {
+  id             Int          @default(autoincrement()) @id
+  email          String       @unique
+  name           String
+  password       String
+  roleId         Int?
+  role           Role?        @relation(fields:         [roleId],         references: [id])
+  organizationId Int
+  organization   Organization @relation(fields:         [organizationId], references: [id])
+}
+
+model Client {
+  id             Int          @default(autoincrement()) @id
+  name           String
+  phoneNumber    String       @unique
+  email          String       @unique
+  organizationId Int
+  organization   Organization @relation(fields:         [organizationId], references: [id])
+  messages       Message[]
+  order          Order[]
+}
+
+model Product {
+  id             Int          @default(autoincrement())          @id
+  name           String
+  price          Float
+  quantity       Int
+  details        String?
+  imageUrl       String?
+  organizationId Int
+  organization   Organization @relation(fields:[organizationId], references: [id])
+  orderItems     OrderItem[]  // Add this field for the reverse relation
+}
+
+model Order {
+  id             Int          @default(autoincrement()) @id
+  clientId       Int
+  organizationId Int
+  totalPrice     Float        @default(0)
+  status         String       @default("pending")
+  createdAt      DateTime     @default(now())
+  client         Client       @relation(fields: [clientId], references: [id])
+  organization   Organization @relation(fields: [organizationId],   references: [id])
+  items          OrderItem[]
+}
+
+model OrderItem{
+  id        Int     @default(autoincrement()) @id
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+  order     Order   @relation(fields: [orderId],   references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model Message {
+  id           Int      @default(autoincrement()) @id
+  content      String
+  sentAt       DateTime @default(now())
+  isSentByUser Boolean  @default(false)
+  clientId     Int
+  client       Client @relation(fields: [clientId], references: [id])
+}
