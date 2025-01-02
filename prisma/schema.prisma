@@ -18,6 +18,8 @@ model Organization {
   email     String   @unique
   name      String
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  profilePhoto   String?
   users     User[]
   clients   Client[]
   products  Product[]
@@ -48,10 +50,14 @@ model User {
   email          String       @unique
   name           String
   password       String
+  profilePhoto   String?
+  refreshToken       String   @default("")
   roleId         Int?
   role           Role?        @relation(fields:         [roleId],         references: [id])
   organizationId Int
   organization   Organization @relation(fields:         [organizationId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
 }
 
 model Client {
@@ -59,7 +65,10 @@ model Client {
   name           String
   phoneNumber    String       @unique
   email          String       @unique
+  profilePhoto   String?
   organizationId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   organization   Organization @relation(fields:         [organizationId], references: [id])
   messages       Message[]
   order          Order[]
@@ -72,6 +81,8 @@ model Product {
   quantity       Int
   details        String?
   imageUrl       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
   organizationId Int
   organization   Organization @relation(fields:[organizationId], references: [id])
   orderItems     OrderItem[]  // Add this field for the reverse relation
