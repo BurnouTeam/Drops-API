@@ -19,15 +19,15 @@ export class MessageService {
     take?: number;
     cursor?: Prisma.MessageWhereUniqueInput;
     where?: Prisma.MessageWhereInput;
-    messageBy?: Prisma.MessageOrderByWithRelationInput;
+    orderBy?: Prisma.MessageOrderByWithRelationInput;
   }): Promise<Message[]> {
-    const { skip, take, cursor, where, messageBy } = params;
+    const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.message.findMany({
       skip,
       take,
       cursor,
       where,
-      messageBy,
+      orderBy,
     });
   }
 

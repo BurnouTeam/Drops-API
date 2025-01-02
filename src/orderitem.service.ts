@@ -19,15 +19,15 @@ export class OrderItemService {
     take?: number;
     cursor?: Prisma.OrderItemWhereUniqueInput;
     where?: Prisma.OrderItemWhereInput;
-    OrderBy?: Prisma.OrderItemOrderByWithRelationInput;
+    orderBy?: Prisma.OrderItemOrderByWithRelationInput;
   }): Promise<OrderItem[]> {
-    const { skip, take, cursor, where, OrderBy } = params;
+    const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.orderItem.findMany({
       skip,
       take,
       cursor,
       where,
-      OrderBy,
+      orderBy,
     });
   }
 
