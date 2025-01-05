@@ -33,11 +33,20 @@ export class AuthService {
     ) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    const tokens = this.generateTokens(user)
+
+    const tokens = this.generateTokens(user);
+
+    await this.updateRefreshToken(
+      user.id,
+      user.organizationId,
+      tokens.refreshToken,
+    );
+
     return {
       message: 'Login successful',
+      user: user,
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
     };
   }
 
@@ -52,16 +61,29 @@ export class AuthService {
 
     const user = await this.usersService.create(createUserDto);
 
-    const tokens = this.generateTokens(user)
+    const tokens = this.generateTokens(user);
+
+    await this.updateRefreshToken(
+      user.id,
+      user.organizationId,
+      tokens.refreshToken,
+    );
+
     return {
       message: 'User created!',
       accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken
+      refreshToken: tokens.refreshToken,
+      user: user,
     };
   }
 
   private generateTokens(user: User) {
-    const payload = { sub: user.id, email: user.email, orgId: user.organizationId };
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      orgId: user.organizationId,
+      roleId: user.roleId,
+    };
     const accessToken = this.jwtService.sign(payload, {
       secret: this.configService.get('JWT_SECRET'),
       expiresIn: '15m',
@@ -74,41 +96,52 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private async updateRefreshToken(userId: number, refreshToken: string){
+  private async updateRefreshToken(
+    userId: number,
+    organizationId: number,
+    refreshToken: string,
+  ) {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await this.usersService.update(userId, {
       refreshToken: hashedRefreshToken,
+      organization: organizationId,
     });
   }
 
   async refreshTokens(userId: number, refreshToken: string) {
-    const user = await this.usersService.findOne({id:userId});
-
+    const user = await this.usersService.findOne({ id: userId });
     if (!user || !user.refreshToken) {
-      throw new UnauthorizedException('Access Denied');
+      throw new UnauthorizedException('Access Denied, no data');
     }
 
     const isRefreshTokenValid = await bcrypt.compare(
       refreshToken,
       user.refreshToken,
     );
-
     if (!isRefreshTokenValid) {
-      throw new UnauthorizedException('Access Denied');
+      throw new UnauthorizedException('Access Denied, invalid token');
     }
 
     const tokens = this.generateTokens(user);
-    await this.updateRefreshToken(userId, tokens.refreshToken);
+    await this.updateRefreshToken(
+      userId,
+      user.organizationId,
+      tokens.refreshToken,
+    );
+
     return tokens;
   }
 
   async validateRefreshToken(refreshToken: string): Promise<any> {
-    const secret = this.configService.get('JWT_REFRESH_SECRET')
+    const secret = this.configService.get('JWT_REFRESH_SECRET');
     try {
-      const decoded = this.jwtService.verify(refreshToken, secret);
-      return decoded;
+      const payload = await this.jwtService.verifyAsync(refreshToken, secret);
+      return payload;
     } catch (error) {
-      throw new HttpException('Invalid or expired refresh token', HttpStatus.UNAUTHORIZED)
+      throw new HttpException(
+        'Invalid or expired refresh token',
+        HttpStatus.UNAUTHORIZED,
+      );
     }
   }
 }

@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
@@ -60,8 +61,8 @@ export class UsersService {
       data: {
         ...updateUserDto,
         organization: {
-          connect: { id: updateUserDto.organization }
-        }
+          connect: { id: updateUserDto.organization },
+        },
       },
     });
   }
