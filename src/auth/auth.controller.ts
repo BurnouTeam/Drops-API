@@ -65,10 +65,9 @@ export class AuthController {
     }
 
     try {
-      const { userId } =
-        await this.authService.validateRefreshToken(refreshToken);
+      const { sub } = await this.authService.validateRefreshToken(refreshToken);
 
-      const tokens = await this.authService.refreshTokens(userId, refreshToken);
+      const tokens = await this.authService.refreshTokens(sub, refreshToken);
 
       res.cookie('drop', tokens.refreshToken, {
         httpOnly: true,
@@ -78,11 +77,11 @@ export class AuthController {
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       });
 
-      return res.status(HttpStatus.OK).json({
+      return res.status(200).json({
         accessToken: tokens.accessToken,
       });
     } catch (error) {
-      return res.status(error.status).json({
+      return res.status(400).json({
         message: error.message,
       });
     }
