@@ -34,7 +34,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const tokens = this.generateTokens(user);
+    const tokens = await this.generateTokens(user);
 
     await this.updateRefreshToken(
       user.id,
@@ -42,6 +42,7 @@ export class AuthService {
       tokens.refreshToken,
     );
 
+    this.logger.log(`User ${user.email} logged in`);
     return {
       message: 'Login successful',
       user: user,
@@ -61,7 +62,7 @@ export class AuthService {
 
     const user = await this.usersService.create(createUserDto);
 
-    const tokens = this.generateTokens(user);
+    const tokens = await this.generateTokens(user);
 
     await this.updateRefreshToken(
       user.id,
@@ -69,6 +70,7 @@ export class AuthService {
       tokens.refreshToken,
     );
 
+    this.logger.log(`User ${user.name} created`);
     return {
       message: 'User created!',
       accessToken: tokens.accessToken,
@@ -77,18 +79,18 @@ export class AuthService {
     };
   }
 
-  private generateTokens(user: User) {
+  private async generateTokens(user: User): Promise<any> {
     const payload = {
       sub: user.id,
       email: user.email,
       orgId: user.organizationId,
       roleId: user.roleId,
     };
-    const accessToken = this.jwtService.sign(payload, {
+    const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET'),
       expiresIn: '15m',
     });
-    const refreshToken = this.jwtService.sign(payload, {
+    const refreshToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_REFRESH_SECRET'),
       expiresIn: '7d',
     });
@@ -122,20 +124,22 @@ export class AuthService {
       throw new UnauthorizedException('Access Denied, invalid token');
     }
 
-    const tokens = this.generateTokens(user);
+    const tokens = await this.generateTokens(user);
     await this.updateRefreshToken(
       userId,
       user.organizationId,
       tokens.refreshToken,
     );
-
+    this.logger.log(`Tokens refreshed for the User ${user.name}`);
     return tokens;
   }
 
   async validateRefreshToken(refreshToken: string): Promise<any> {
-    const secret = this.configService.get('JWT_REFRESH_SECRET');
+    const secret_key = this.configService.get('JWT_REFRESH_SECRET');
     try {
-      const payload = await this.jwtService.verifyAsync(refreshToken, secret);
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: secret_key,
+      });
       return payload;
     } catch (error) {
       throw new HttpException(
