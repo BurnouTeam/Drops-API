@@ -64,9 +64,8 @@ model User {
 }
 
 model Client {
-  id             Int          @default(autoincrement()) @id
   name           String
-  phoneNumber    String       @unique
+  phoneNumber    String       @unique @id
   email          String       @unique
   profilePhoto   String?
 
@@ -86,6 +85,9 @@ model Client {
   organization   Organization @relation(fields:         [organizationId], references: [id])
   messages       Message[]
   order          Order[]
+
+  @@unique([phoneNumber,organizationId])
+  @@index([organizationId, phoneNumber])
 }
 
 model Product {
@@ -104,12 +106,12 @@ model Product {
 
 model Order {
   id             Int          @default(autoincrement()) @id
-  clientId       Int
+  clientId       String
   organizationId Int
   totalPrice     Float        @default(0)
   status         String       @default("pending")
   createdAt      DateTime     @default(now())
-  client         Client       @relation(fields: [clientId], references: [id])
+  client         Client       @relation(fields: [clientId], references: [phoneNumber])
   organization   Organization @relation(fields: [organizationId],   references: [id])
   items          OrderItem[]
 }
@@ -129,6 +131,6 @@ model Message {
   content      String
   sentAt       DateTime @default(now())
   isSentByUser Boolean  @default(false)
-  clientId     Int
-  client       Client @relation(fields: [clientId], references: [id])
+  clientId     String
+  client       Client @relation(fields: [clientId], references: [phoneNumber])
 }
