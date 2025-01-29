@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from './prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { Organization, Prisma } from '@prisma/client';
 
 @Injectable()
 export class OrganizationService {
   constructor(private prisma: PrismaService) {}
 
-  async organization(
+  async findOne(
     organizationWhereUniqueInput: Prisma.OrganizationWhereUniqueInput,
   ): Promise<Organization | null> {
     return this.prisma.organization.findUnique({
@@ -14,14 +14,14 @@ export class OrganizationService {
     });
   }
 
-  async organizations(params: {
+  async find(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.OrganizationWhereUniqueInput;
     where?: Prisma.OrganizationWhereInput;
     orderBy?: Prisma.OrganizationOrderByWithRelationInput;
   }): Promise<Organization[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    const { skip, take, cursor, where, orderBy } = params || {};
     return this.prisma.organization.findMany({
       skip,
       take,
@@ -31,15 +31,13 @@ export class OrganizationService {
     });
   }
 
-  async createOrganization(
-    data: Prisma.OrganizationCreateInput,
-  ): Promise<Organization> {
+  async create(data: Prisma.OrganizationCreateInput): Promise<Organization> {
     return this.prisma.organization.create({
       data,
     });
   }
 
-  async updateOrganization(params: {
+  async update(params: {
     where: Prisma.OrganizationWhereUniqueInput;
     data: Prisma.OrganizationUpdateInput;
   }): Promise<Organization> {
@@ -50,7 +48,7 @@ export class OrganizationService {
     });
   }
 
-  async deleteOrganization(
+  async remove(
     where: Prisma.OrganizationWhereUniqueInput,
   ): Promise<Organization> {
     return this.prisma.organization.delete({

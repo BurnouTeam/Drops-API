@@ -6,6 +6,8 @@ import {
   Patch,
   Delete,
   Param,
+  ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -15,10 +17,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('')
-  async findAll() {
-    return this.usersService.findAll({
-      where: { organizationId: 1 },
+  @Get(':organizationId')
+  async findAll(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Query('fields') fields?: string,
+  ) {
+    return this.usersService.find({
+      where: { organizationId: organizationId },
+      fields: fields,
     });
   }
 
@@ -29,7 +35,17 @@ export class UsersController {
 
   @Post('signup')
   async signUp(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    const input = {
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: createUserDto.password,
+      profilePhoto: createUserDto.profilePhoto,
+      organization: {
+        connect: { id: createUserDto.organizationId },
+      },
+    };
+
+    return this.usersService.create(input);
   }
 
   @Patch(':id')
@@ -43,8 +59,19 @@ export class UsersController {
   }
 
   @Post('')
-  createUser(): any {
-    // return this.usersService.create({
+  @Post(':organizationId')
+  createUser(@Body() createUserDto: CreateUserDto): any {
+    const input = {
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: createUserDto.password,
+      profilePhoto: createUserDto.profilePhoto,
+      organization: {
+        connect: { id: createUserDto.organizationId },
+      },
+    };
+    return this.usersService.create(input);
+
     //   name: 'Dante',
     //   email: 'danteeng@hotmail.com',
     //   password: 'hylanna123',

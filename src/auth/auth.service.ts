@@ -26,7 +26,10 @@ export class AuthService {
   ) {}
 
   async login(loginUserDto: LoginUserDto) {
-    const user = await this.usersService.findByEmail(loginUserDto.email);
+    const user = await this.usersService.findByEmail(
+      loginUserDto.email,
+      loginUserDto.organizationId,
+    );
     if (
       !user ||
       !(await bcrypt.compare(loginUserDto.password, user.password))
@@ -54,13 +57,24 @@ export class AuthService {
   async signUp(createUserDto: CreateUserDto) {
     const existingUser = await this.usersService.findByEmail(
       createUserDto.email,
+      createUserDto.organizationId,
     );
 
     if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
 
-    const user = await this.usersService.create(createUserDto);
+    const input = {
+      name: createUserDto.name,
+      email: createUserDto.email,
+      password: createUserDto.password,
+      profilePhoto: createUserDto.profilePhoto,
+      organization: {
+        connect: { id: createUserDto.organizationId },
+      },
+    };
+
+    const user = await this.usersService.create(input);
 
     const tokens = await this.generateTokens(user);
 
@@ -106,7 +120,7 @@ export class AuthService {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
     await this.usersService.update(userId, {
       refreshToken: hashedRefreshToken,
-      organization: organizationId,
+      organizationId: organizationId,
     });
   }
 
