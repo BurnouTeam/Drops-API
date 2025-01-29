@@ -1,0 +1,41 @@
+meta {
+  name: Create User of 1 Organization
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/user/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Dante de Araújo",
+    "email": "danteeng@hotmail.com",
+    "phoneNumber": "+5585996105145",
+    "password": "dantes123456",
+    "organizationId": 1
+  }
+}
+
+docs {
+  Expects:
+  
+  name: string;
+  phoneNumber: string;
+  email: string;
+  profilePhoto?: string;
+  organizationId: number;
+  
+}

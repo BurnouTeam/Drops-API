@@ -1,0 +1,15 @@
+meta {
+  name: Refresh
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{api_url}}/auth/refresh
+  body: none
+  auth: none
+}
+
+headers {
+  User-Agent: insomnia/10.2.0
+}

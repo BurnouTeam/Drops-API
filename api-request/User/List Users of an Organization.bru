@@ -1,0 +1,20 @@
+meta {
+  name: List Users of an Organization
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/client/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 2
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
