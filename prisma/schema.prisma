@@ -47,7 +47,7 @@ model Permission {
 
 model User {
   id             Int          @default(autoincrement()) @id
-  email          String       @unique
+  email          String
   name           String
   password       String
   profilePhoto   String?
@@ -58,6 +58,9 @@ model User {
   organization   Organization @relation(fields:         [organizationId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([email,organizationId])
+  @@index([organizationId, email])
 }
 
 model Client {
@@ -66,6 +69,17 @@ model Client {
   phoneNumber    String       @unique
   email          String       @unique
   profilePhoto   String?
+
+  // Address Fields
+  street        String
+  number        String
+  complement    String?
+  neighborhood  String
+  city          String
+  state         String
+  cep           String
+  country       String @default("Brasil")
+
   organizationId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
