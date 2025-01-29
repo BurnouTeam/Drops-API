@@ -1,11 +1,11 @@
 meta {
-  name: New Request
+  name: Webhook
   type: http
   seq: 2
 }
 
 post {
-  url: {{ _.bot_api }}/enviar-mensagem
+  url: {{api_url}}/bwh
   body: json
   auth: none
 }
@@ -17,7 +17,10 @@ headers {
 
 body:json {
   {
-  	"numero":"558596105145",
-  	"mensagem":"Ola from meu teste do insomnia "
+    "eventType":"client.update",
+    "data":{
+      "message": "Hello",
+      "value": 1
+    }
   }
 }
