@@ -8,9 +8,17 @@ import { ClientModule } from './client/client.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { OrganizationModule } from './organization/organization.module';
 import { BotWebhookModule } from './bot-webhook/bot-webhook.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ClientEventListener } from './client/client.event';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot({
+      wildcard: true,
+      newListener: true,
+      removeListener: true,
+      delimiter: '.',
+    }),
     ConfigModule.forRoot(),
     PrismaModule,
     UsersModule,

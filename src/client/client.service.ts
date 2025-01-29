@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Client, Prisma } from '@prisma/client';
+import { OnEvent } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ClientService {
@@ -14,25 +15,26 @@ export class ClientService {
     });
   }
 
-  async find(
-    params: {
-      skip?: number;
-      take?: number;
-      cursor?: Prisma.ClientWhereUniqueInput;
-      where?: Prisma.ClientWhereInput;
-      orderBy?: Prisma.ClientOrderByWithRelationInput;
-      fields?: string;
-    },
-  ): Promise<Partial<Client>[]> {
+  async find(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.ClientWhereUniqueInput;
+    where?: Prisma.ClientWhereInput;
+    orderBy?: Prisma.ClientOrderByWithRelationInput;
+    fields?: string;
+  }): Promise<Partial<Client>[]> {
     const { skip, take, cursor, where, orderBy, fields } = params;
 
     let select = undefined;
-    if (fields){
-      const requestedFields = fields.split(',').reduce( (acc, field) => {
-        acc[field.trim()] = true;
-        return acc;
-      }, {} as Record<string, boolean>);
-      select = requestedFields
+    if (fields) {
+      const requestedFields = fields.split(',').reduce(
+        (acc, field) => {
+          acc[field.trim()] = true;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+      select = requestedFields;
     }
 
     return this.prisma.client.findMany({

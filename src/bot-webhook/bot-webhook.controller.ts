@@ -1,34 +1,34 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  BadRequestException,
+} from '@nestjs/common';
 import { BotWebhookService } from './bot-webhook.service';
-import { CreateBotWebhookDto } from './dto/create-bot-webhook.dto';
-import { UpdateBotWebhookDto } from './dto/update-bot-webhook.dto';
 
-@Controller('bot-webhook')
+@Controller('bwh')
 export class BotWebhookController {
   constructor(private readonly botWebhookService: BotWebhookService) {}
-
   @Post()
-  create(@Body() createBotWebhookDto: CreateBotWebhookDto) {
-    return this.botWebhookService.create(createBotWebhookDto);
-  }
+  async handleWebhook(
+    @Body() payload: { eventType: string; data: any },
+    @Headers('x-bot-signature') signature?: string,
+  ) {
+    const { eventType, data } = payload;
 
-  @Get()
-  findAll() {
-    return this.botWebhookService.findAll();
-  }
+    if (!eventType || !data) {
+      throw new BadRequestException('Missing eventType or data');
+    }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.botWebhookService.findOne(+id);
-  }
+    // if (!this.botWebhookService.verifySignature(payload, signature)) {
+    //   throw new BadRequestException('Invalid Signature');
+    // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBotWebhookDto: UpdateBotWebhookDto) {
-    return this.botWebhookService.update(+id, updateBotWebhookDto);
-  }
+    await this.botWebhookService.processWebhookData(eventType, data);
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.botWebhookService.remove(+id);
+    return {
+      message: `Webhook event ${eventType} received and will be processed.`,
+    };
   }
 }
