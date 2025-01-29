@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ClientModule } from './client/client.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { OrganizationModule } from './organization/organization.module';
+import { BotWebhookModule } from './bot-webhook/bot-webhook.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { OrganizationModule } from './organization/organization.module';
     AuthModule,
     ClientModule,
     OrganizationModule,
+    BotWebhookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
