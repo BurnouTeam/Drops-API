@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,38 +19,54 @@ export class UsersService {
     });
   }
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findByEmail(
+    email: string,
+    organizationId: number,
+  ): Promise<User | null> {
     return this.prisma.user.findUnique({
-      where: { email },
+      where: {
+        email_organizationId: {
+          email: email,
+          organizationId: organizationId,
+        },
+      },
     });
   }
 
-  async findAll(params: {
+  async find(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.UserWhereUniqueInput;
     where?: Prisma.UserWhereInput;
     orderBy?: Prisma.UserOrderByWithRelationInput;
-  }): Promise<User[]> {
-    const { skip, take, cursor, where, orderBy } = params;
+    fields?: string;
+  }): Promise<Partial<User>[]> {
+    const { skip, take, cursor, where, orderBy, fields } = params;
+    let select = undefined;
+    if (fields){
+      const requestedFields = fields.split(',').reduce( (acc, field) => {
+        acc[field.trim()] = true;
+        return acc;
+      }, {} as Record<string, boolean>);
+      select = requestedFields
+    }
+
     return this.prisma.user.findMany({
       skip,
       take,
       cursor,
       where,
       orderBy,
+      select,
     });
   }
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+  async create(data: Prisma.UserCreateInput): Promise<User> {
+    const hashedPassword = await bcrypt.hash(data.password, 10);
     return this.prisma.user.create({
       data: {
-        ...createUserDto,
+        ...data,
         password: hashedPassword,
-        organization: {
-          connect: { id: createUserDto.organization },
-        },
       },
     });
   }
@@ -60,9 +76,6 @@ export class UsersService {
       where: { id },
       data: {
         ...updateUserDto,
-        organization: {
-          connect: { id: updateUserDto.organization },
-        },
       },
     });
   }
