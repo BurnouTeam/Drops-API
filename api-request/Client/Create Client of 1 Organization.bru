@@ -1,0 +1,36 @@
+meta {
+  name: Create Client of 1 Organization
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/client
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Filipe Cavalcante",
+    "email": "lipeaoc@gmail.com",
+    "phoneNumber": "+5585996102553",
+    "organizationId": 2
+  }
+}
+
+docs {
+  Expects:
+  
+  name: string;
+  phoneNumber: string;
+  email: string;
+  profilePhoto?: string;
+  organizationId: number;
+  
+}

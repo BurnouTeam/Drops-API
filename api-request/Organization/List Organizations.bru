@@ -1,0 +1,16 @@
+meta {
+  name: List Organizations
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/organization
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}

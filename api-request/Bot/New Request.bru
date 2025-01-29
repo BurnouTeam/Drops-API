@@ -1,0 +1,23 @@
+meta {
+  name: New Request
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{ _.bot_api }}/enviar-mensagem
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+  	"numero":"558596105145",
+  	"mensagem":"Ola from meu teste do insomnia "
+  }
+}

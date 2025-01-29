@@ -1,0 +1,34 @@
+meta {
+  name: Create one Organization
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/organization
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Drops",
+    "email": "drops@hotmail.com",
+    "profilePhoto": ""
+  }
+}
+
+docs {
+  Expects:
+  
+  name: string;
+  phoneNumber: string;
+  profilePhoto?: string;
+  
+  
+}
