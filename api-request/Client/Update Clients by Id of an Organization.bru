@@ -1,17 +1,17 @@
 meta {
   name: Update Clients by Id of an Organization
   type: http
-  seq: 4
+  seq: 3
 }
 
 patch {
-  url: {{api_url}}/client/:id
+  url: {{api_url}}/client/:phoneNumber
   body: json
   auth: none
 }
 
 params:path {
-  id: 5
+  phoneNumber: +5585996105145
 }
 
 headers {
