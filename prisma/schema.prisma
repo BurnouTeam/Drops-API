@@ -25,6 +25,7 @@ model Organization {
   products  Product[]
   orders    Order[]
   roles     Role[]
+  messages  Message[]
 }
 
 model Role {
@@ -127,10 +128,27 @@ model OrderItem{
 }
 
 model Message {
-  id           Int      @default(autoincrement()) @id
-  content      String
-  sentAt       DateTime @default(now())
-  isSentByUser Boolean  @default(false)
-  clientId     String
-  client       Client @relation(fields: [clientId], references: [phoneNumber])
+  id               Int      @id @default(autoincrement())
+  whatsappMessageId String?  @unique  // Message ID from WhatsApp-web.js
+  content          String?
+  sentAt           DateTime @default(now())
+  fromMe           Boolean  @default(false) // True if sent by the organization, False if from client
+  status           String   @default("sent") // Message status: "sent", "delivered", "read", "failed"
+
+  // Media Support
+  mediaUrl        String?
+  mediaType       String?   // Example: "image", "video", "audio", "document"
+
+  // Message Type
+  messageType     String    @default("text") // "text", "image", "video", "audio", "location", "sticker", "document"
+
+  // Chat Context
+  chatId          String    // The chat session ID from WhatsApp-web.js
+  clientId        String
+  client          Client    @relation(fields: [clientId], references: [phoneNumber])
+
+  organizationId  Int
+  organization    Organization @relation(fields: [organizationId], references: [id])
+
+  @@index([clientId, organizationId])
 }
