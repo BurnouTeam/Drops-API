@@ -12,6 +12,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ClientEventListener } from './client/client.event';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
+import { OrderItemModule } from './order-item/order-item.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { OrderModule } from './order/order.module';
     BotWebhookModule,
     ProductModule,
     OrderModule,
+    OrderItemModule,
   ],
   controllers: [AppController],
   providers: [AppService],
