@@ -1,0 +1,44 @@
+meta {
+  name: Update Product by Id of an Organization
+  type: http
+  seq: 3
+}
+
+patch {
+  url: {{api_url}}/product/:id
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 5
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água de igreja santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}
+
+docs {
+  Faz update em um produto desde que passe o id da organização e seu id.
+  
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água de igreja santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}

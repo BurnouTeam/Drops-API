@@ -1,0 +1,22 @@
+meta {
+  name: Delete Client
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{api_url}}/client/:organizationId/:phoneNumber
+  body: json
+  auth: none
+}
+
+params:path {
+  phoneNumber: 
+  organizationId: 2
+}
+
+body:json {
+  {
+    "id": 2
+  }
+}

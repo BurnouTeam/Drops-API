@@ -1,0 +1,16 @@
+meta {
+  name: Client Detail
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{api_url}}/client/:organizationId/:phoneNumber
+  body: none
+  auth: none
+}
+
+params:path {
+  phoneNumber: +5585996105145
+  organizationId: 2
+}

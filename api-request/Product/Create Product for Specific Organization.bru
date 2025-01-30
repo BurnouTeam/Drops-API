@@ -1,0 +1,44 @@
+meta {
+  name: Create Product for Specific Organization
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/product/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}
+
+docs {
+  Expects:
+  
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}
