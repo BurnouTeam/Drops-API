@@ -46,19 +46,22 @@ export class ClientController {
     return this.clientService.find({ fields, where: { organizationId } });
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.clientService.client({ id });
+  @Get(':organizationId/:phoneNumber')
+  findOne(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Param('phoneNumber') phoneNumber: string,
+  ) {
+    return this.clientService.client({ phoneNumber, organizationId });
   }
 
-  @Patch(':id')
+  @Patch(':phoneNumber')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('phoneNumber') phoneNumber: string,
     @Body() updateClientDto: UpdateClientDto,
   ) {
     const params = {
       where: {
-        id,
+        phoneNumber,
         organizationId: updateClientDto.organizationId,
       },
       data: updateClientDto,
@@ -66,8 +69,11 @@ export class ClientController {
     return this.clientService.update(params);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.clientService.remove({ id });
+  @Delete(':organizationId/:phoneNumber')
+  remove(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Param('phoneNumber') phoneNumber: string,
+  ) {
+    return this.clientService.remove({ phoneNumber, organizationId });
   }
 }
