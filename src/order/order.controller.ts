@@ -20,7 +20,6 @@ export class OrderController {
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
     const input = {
-      organizationId: createOrderDto.organizationId,
       totalPrice: createOrderDto.totalPrice,
       status: createOrderDto.status,
       organization: {
@@ -45,9 +44,21 @@ export class OrderController {
     return this.orderService.find({ fields, where: { organizationId } });
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.orderService.order({ id });
+  @Get(':organizationId/:id')
+  findOne(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.orderService.order({
+      where: {
+        id,
+        organizationId,
+      },
+      include: {
+        client: true,
+        items: true,
+      },
+    });
   }
 
   @Patch(':id')
@@ -69,8 +80,18 @@ export class OrderController {
     return this.orderService.update(params);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.orderService.remove({ id });
+  @Delete(':organizationId/:id')
+  remove(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.orderService.remove({ id, organizationId });
+  }
+
+  @Get('products/by/org/:organizationId')
+  async getOrderProductsByOrganizationId(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ): Promise<any> {
+    return this.orderService.getOrderProductsByOrganizationId(organizationId);
   }
 }

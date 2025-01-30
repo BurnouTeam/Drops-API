@@ -6,11 +6,14 @@ import { Order, Prisma } from '@prisma/client';
 export class OrderService {
   constructor(private prisma: PrismaService) {}
 
-  async order(
-    orderWhereUniqueInput: Prisma.OrderWhereUniqueInput,
-  ): Promise<Order | null> {
+  async order(params: {
+    include?: Prisma.OrderInclude;
+    where?: Prisma.OrderWhereUniqueInput;
+  }): Promise<Order | null> {
+    const { where, include } = params;
     return this.prisma.order.findUnique({
-      where: orderWhereUniqueInput,
+      where,
+      include,
     });
   }
 
@@ -18,11 +21,12 @@ export class OrderService {
     skip?: number;
     take?: number;
     cursor?: Prisma.OrderWhereUniqueInput;
+    include?: Prisma.OrderInclude;
     where?: Prisma.OrderWhereInput;
     orderBy?: Prisma.OrderOrderByWithRelationInput;
     fields?: string;
   }): Promise<Partial<Order>[]> {
-    const { skip, take, cursor, where, orderBy, fields } = params;
+    const { skip, take, cursor, where, orderBy, include, fields } = params;
 
     let select = undefined;
     if (fields) {
@@ -67,5 +71,29 @@ export class OrderService {
     return this.prisma.order.delete({
       where,
     });
+  }
+
+  async getOrderProductsByOrganizationId(organizationId: number): Promise<any> {
+    const orders = await this.prisma.order.findMany({
+      where: { organizationId },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    // Flatten the products from all orders
+    const products = orders.reduce((acc, order) => {
+      order.items.forEach((item) => {
+        acc.push(item.product);
+      });
+      return acc;
+    }, []);
+
+    // return orders;
+    return products;
   }
 }
