@@ -1,18 +1,18 @@
 meta {
-  name: Delete Client
+  name: Delete Product
   type: http
   seq: 5
 }
 
 delete {
-  url: {{api_url}}/client/:organizationId/:phoneNumber
+  url: {{api_url}}/order/:organizationId/:id
   body: json
   auth: none
 }
 
 params:path {
-  phoneNumber: +5585996102553
   organizationId: 2
+  id: 2
 }
 
 body:json {

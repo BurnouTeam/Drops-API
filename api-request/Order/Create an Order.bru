@@ -1,0 +1,47 @@
+meta {
+  name: Create an Order
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/order/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "clientPhoneNumber": "+5585996105145",
+    "organizationId": 2,
+    "totalPrice": 20,
+    "status": "Pending",
+    "items":[{
+      "productId":1,
+      "quantity":10,
+      "price":20
+    }]
+  }
+}
+
+docs {
+  Expects:
+  
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}
