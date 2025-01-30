@@ -9,7 +9,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { OrganizationModule } from './organization/organization.module';
 import { BotWebhookModule } from './bot-webhook/bot-webhook.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { ClientEventListener } from './client/client.event';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { OrderItemModule } from './order-item/order-item.module';

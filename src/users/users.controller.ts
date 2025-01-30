@@ -58,9 +58,8 @@ export class UsersController {
     return this.usersService.delete(id);
   }
 
-  @Post('')
   @Post(':organizationId')
-  createUser(@Body() createUserDto: CreateUserDto): any {
+  create(@Body() createUserDto: CreateUserDto): any {
     const input = {
       name: createUserDto.name,
       email: createUserDto.email,
@@ -71,13 +70,5 @@ export class UsersController {
       },
     };
     return this.usersService.create(input);
-
-    //   name: 'Dante',
-    //   email: 'danteeng@hotmail.com',
-    //   password: 'hylanna123',
-    //   organization: {
-    //     connect: { id: 1 },
-    //   },
-    // });
   }
 }

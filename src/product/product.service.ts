@@ -6,11 +6,14 @@ import { Product, Prisma } from '@prisma/client';
 export class ProductService {
   constructor(private prisma: PrismaService) {}
 
-  async product(
-    productWhereUniqueInput: Prisma.ProductWhereUniqueInput,
-  ): Promise<Product | null> {
+  async product(params: {
+    include?: Prisma.ProductInclude;
+    where?: Prisma.ProductWhereUniqueInput;
+  }): Promise<Product | null> {
+    const { where, include } = params;
     return this.prisma.product.findUnique({
-      where: productWhereUniqueInput,
+      where,
+      include,
     });
   }
 

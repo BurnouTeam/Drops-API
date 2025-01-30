@@ -46,7 +46,9 @@ export class ProductController {
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.productService.product({ id, organizationId });
+    return this.productService.product({
+      where: { id, organizationId },
+    });
   }
 
   @Patch(':id')

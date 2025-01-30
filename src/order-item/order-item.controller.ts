@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { OrderItemService } from './order-item.service';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { UpdateOrderItemDto } from './dto/update-order-item.dto';
@@ -9,26 +18,36 @@ export class OrderItemController {
 
   @Post()
   create(@Body() createOrderItemDto: CreateOrderItemDto) {
-    return this.orderItemService.create(createOrderItemDto);
-  }
+    const { orderId, productId, quantity, price } = createOrderItemDto;
 
-  @Get()
-  findAll() {
-    return this.orderItemService.findAll();
+    return this.orderItemService.create({
+      order: { connect: { id: orderId } },
+      product: { connect: { id: productId } },
+      quantity,
+      price,
+    });
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderItemService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.orderItemService.orderItem({ where: { id } });
+  }
+
+  @Get('')
+  findAll() {
+    return this.orderItemService.find({});
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOrderItemDto: UpdateOrderItemDto) {
-    return this.orderItemService.update(+id, updateOrderItemDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateOrderItemDto: UpdateOrderItemDto,
+  ) {
+    return this.orderItemService.update(id, updateOrderItemDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderItemService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.orderItemService.remove({ id });
   }
 }
