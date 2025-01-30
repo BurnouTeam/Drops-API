@@ -12,6 +12,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { OrderItemModule } from './order-item/order-item.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { OrderItemModule } from './order-item/order-item.module';
     ProductModule,
     OrderModule,
     OrderItemModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
