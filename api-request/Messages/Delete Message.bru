@@ -1,18 +1,19 @@
 meta {
-  name: Delete Product
+  name: Delete Message
   type: http
-  seq: 5
+  seq: 3
 }
 
 delete {
-  url: {{api_url}}/order/:organizationId/:id
+  url: {{api_url}}/product/:organizationId/:clientId/:messageId
   body: json
   auth: none
 }
 
 params:path {
+  clientId: 
+  messageId: 
   organizationId: 2
-  id: 2
 }
 
 body:json {

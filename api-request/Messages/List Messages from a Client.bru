@@ -1,0 +1,21 @@
+meta {
+  name: List Messages from a Client
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api_url}}/message/:organizationId/:clientNumber
+  body: json
+  auth: none
+}
+
+params:path {
+  clientNumber: +5585996105145
+  organizationId: 2
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}

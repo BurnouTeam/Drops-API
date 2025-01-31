@@ -19,29 +19,32 @@ export class OrderController {
 
   @Post()
   create(@Body() createOrderDto: CreateOrderDto) {
-    const input = {
-      totalPrice: createOrderDto.totalPrice,
-      status: createOrderDto.status,
-      organization: {
-        connect: {
-          id: createOrderDto.organizationId,
-        },
-      },
-      client: {
-        connect: {
-          phoneNumber: createOrderDto.clientPhoneNumber,
-        },
-      },
-    };
-    return this.orderService.create(input);
+    return this.orderService.createOrder(createOrderDto);
   }
 
+  @Post('/default')
+  createDefaultOrder(@Body() createOrderDto: CreateOrderDto) {
+    // return this.orderService.createDefaultOrder();
+  }
+
+  // @Get(':organizationId')
+  // findAll(
+  //   @Param('organizationId', ParseIntPipe) organizationId: number,
+  //   @Query('fields') fields?: string,
+  // ) {
+  //   return this.orderService.find({
+  //     where: { organizationId },
+  //   });
+  // }
+
   @Get(':organizationId')
-  findAll(
+  findAllByStatus(
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Query('fields') fields?: string,
   ) {
-    return this.orderService.find({ fields, where: { organizationId } });
+    return this.orderService.findAllOrders({
+      where: { organizationId },
+    });
   }
 
   @Get(':organizationId/:id')
@@ -80,12 +83,40 @@ export class OrderController {
     return this.orderService.update(params);
   }
 
+  @Patch('/next/:id')
+  evolveOrder(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    const { organizationId, status } = updateOrderDto;
+    const params = {
+      where: { id, organizationId },
+      data: {
+        status,
+      },
+    };
+    return this.orderService.evolveOrderStatus(params);
+  }
+
+  @Patch('/cancel/:id')
+  cancel(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
+    const { organizationId, status } = updateOrderDto;
+    const params = {
+      where: { id, organizationId },
+      data: { status },
+    };
+    return this.orderService.recuseOrder(params);
+  }
+
   @Delete(':organizationId/:id')
-  remove(
+  deleteOrder(
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.orderService.remove({ id, organizationId });
+    return this.orderService.deleteOrder({ id, organizationId });
   }
 
   @Get('products/by/org/:organizationId')

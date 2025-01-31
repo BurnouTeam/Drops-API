@@ -1,17 +1,13 @@
 meta {
-  name: Create Product for Specific Organization
+  name: Create Message From Client
   type: http
-  seq: 3
+  seq: 6
 }
 
 post {
-  url: {{api_url}}/product/:organizationId
+  url: {{api_url}}/message/from
   body: json
   auth: none
-}
-
-params:path {
-  organizationId: 
 }
 
 headers {
@@ -21,11 +17,15 @@ headers {
 
 body:json {
   {
-    "name": "Água Benta",
-    "price": 10.0,
-    "quantity": 20,
-    "details": "Uma água santa muito boa",
-    "imageUrl": "",
+    "chatId": "",
+    "whatsappMessageId": "",
+    "content": "",
+    "fromMe": false,
+    "status": "",
+    "mediaUrl": "",
+    "mediaType": "",
+    "messageType": "",
+    "clientId": "",
     "organizationId": 2
   }
 }

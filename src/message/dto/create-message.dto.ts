@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsNotEmpty } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsNotEmpty, IsDate } from 'class-validator';
 
 export class CreateMessageDto {
   @IsNotEmpty()
@@ -16,6 +16,9 @@ export class CreateMessageDto {
   @IsOptional()
   @IsBoolean()
   fromMe?: boolean; // True if sent by the organization, False if from client
+  @IsOptional()
+  @IsDate()
+  sentAt?: Date;
 
   @IsOptional()
   @IsString()
