@@ -1,0 +1,17 @@
+meta {
+  name: Message Detail
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{api_url}}/message/:organizationId/:clientId/:messageId
+  body: none
+  auth: none
+}
+
+params:path {
+  messageId: 
+  clientId: 
+  organizationId: 2
+}

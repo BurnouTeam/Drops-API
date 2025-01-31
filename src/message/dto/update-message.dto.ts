@@ -1,4 +1,4 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateMessageDto {
   @IsOptional()
@@ -16,4 +16,8 @@ export class UpdateMessageDto {
   @IsOptional()
   @IsString()
   messageType?: string;
+
+  @IsNotEmpty()
+  @IsInt()
+  organizationId: number;
 }

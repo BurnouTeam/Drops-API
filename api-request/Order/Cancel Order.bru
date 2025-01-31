@@ -1,17 +1,17 @@
 meta {
-  name: Update Order by Id of an Organization
+  name: Cancel Order
   type: http
-  seq: 6
+  seq: 5
 }
 
 patch {
-  url: {{api_url}}/order/:id
+  url: {{api_url}}/order/next/:id
   body: json
   auth: none
 }
 
 params:path {
-  id: 1
+  id: 
 }
 
 headers {

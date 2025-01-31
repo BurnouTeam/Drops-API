@@ -1,17 +1,17 @@
 meta {
-  name: Update Order by Id of an Organization
+  name: Update Message of a Client
   type: http
-  seq: 6
+  seq: 2
 }
 
 patch {
-  url: {{api_url}}/order/:id
+  url: {{api_url}}/message/:id
   body: json
   auth: none
 }
 
 params:path {
-  id: 1
+  id: 
 }
 
 headers {
@@ -21,16 +21,16 @@ headers {
 
 body:json {
   {
-    "clientPhoneNumber": "+5585996105145",
-    "organizationId": 2,
-    "totalPrice": 240,
-    "status": "Pending",
-      "items":[{
-      "productId":1,
-      "quantity":12,
-      "price":20
-    }]
-  
+    "chatId": "",
+    "whatsappMessageId": "",
+    "content": "",
+    "fromMe": true,
+    "status": "",
+    "mediaUrl": "",
+    "mediaType": "",
+    "messageType": "",
+    "clientId": "",
+    "organizationId": 2
   }
 }
 
