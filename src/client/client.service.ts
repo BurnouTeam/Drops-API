@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Client, Prisma } from '@prisma/client';
 import { OnEvent } from '@nestjs/event-emitter';
@@ -68,5 +68,19 @@ export class ClientService {
     return this.prisma.client.delete({
       where,
     });
+  }
+
+  async getDefaultOrder(params: { where: Prisma.ClientWhereUniqueInput }) {
+    const { where } = params;
+    const client = await this.prisma.client.findUnique({
+      where,
+      include: { defaultOrder: true },
+    });
+
+    if (!client) {
+      throw new NotFoundException('Client not found');
+    }
+
+    return client.defaultOrder;
   }
 }

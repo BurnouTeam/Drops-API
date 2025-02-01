@@ -14,18 +14,19 @@ datasource db {
 }
 
 model Organization {
-  id        Int      @default(autoincrement()) @id
-  email     String   @unique
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  profilePhoto   String?
-  users     User[]
-  clients   Client[]
-  products  Product[]
-  orders    Order[]
-  roles     Role[]
-  messages  Message[]
+  id            Int      @default(autoincrement()) @id
+  email         String   @unique
+  name          String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt
+  profilePhoto  String?
+  users         User[]
+  clients       Client[]
+  products      Product[]
+  productTypes  ProductType[]
+  orders        Order[]
+  roles         Role[]
+  messages      Message[]
 }
 
 model Role {
@@ -47,62 +48,92 @@ model Permission {
 }
 
 model User {
-  id             Int          @default(autoincrement()) @id
-  email          String
-  name           String
-  password       String
-  profilePhoto   String?
-  refreshToken       String   @default("")
-  roleId         Int?
-  role           Role?        @relation(fields:         [roleId],         references: [id])
-  organizationId Int
-  organization   Organization @relation(fields:         [organizationId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id              Int          @default(autoincrement()) @id
+  email           String
+  name            String
+  password        String
+  profilePhoto    String?
+  refreshToken    String   @default("")
+  roleId          Int?
+  role            Role?        @relation(fields:         [roleId],         references: [id])
+  organizationId  Int
+  organization    Organization @relation(fields:         [organizationId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
 
   @@unique([email,organizationId])
   @@index([organizationId, email])
 }
 
 model Client {
-  name           String
-  phoneNumber    String       @unique @id
-  email          String       @unique
-  profilePhoto   String?
+  name            String
+  phoneNumber     String       @unique @id
+  email           String       @unique
+  profilePhoto    String?
 
   // Address Fields
-  street        String
-  number        String
-  complement    String?
-  neighborhood  String
-  city          String
-  state         String
-  cep           String
-  country       String @default("Brasil")
+  street          String
+  number          String
+  complement      String?
+  neighborhood    String
+  city            String
+  state           String
+  cep             String
+  country         String @default("Brasil")
 
-  organizationId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  organization   Organization @relation(fields:         [organizationId], references: [id])
-  messages       Message[]
-  order          Order[]
+  organizationId  Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+  organization    Organization @relation(fields:         [organizationId], references: [id])
+  messages        Message[]
+  order           Order[]
+
+  defaultOrder    DefaultOrder? @relation(fields: [defaultOrderId], references: [id])
+  defaultOrderId  Int? @unique
 
   @@unique([phoneNumber,organizationId])
   @@index([organizationId, phoneNumber])
 }
 
+model DefaultOrder {
+  id        Int       @default(autoincrement()) @id
+  client    Client?
+  clientId  String?
+  items     DefaultOrderItem[]
+}
+
+model DefaultOrderItem {
+  id         Int      @default(autoincrement()) @id
+  template   DefaultOrder@relation(fields: [templateId], references: [id], onDelete: Cascade)
+  templateId Int
+  product    Product @relation(fields: [productId], references: [id])
+  productId  Int
+  quantity   Int
+}
+
 model Product {
-  id             Int          @default(autoincrement())          @id
-  name           String
-  price          Float
-  quantity       Int
-  details        String?
-  imageUrl       String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  organizationId Int
-  organization   Organization @relation(fields:[organizationId], references: [id])
-  orderItems     OrderItem[]  // Add this field for the reverse relation
+  id                Int         @default(autoincrement()) @id
+  name              String
+  price             Float
+  quantity          Int
+  details           String?
+  imageUrl          String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @default(now())   @updatedAt
+  typeId            Int?
+  type              ProductType?   @relation(fields:[typeId], references: [id])
+  organizationId    Int
+  organization      Organization       @relation(fields:[organizationId], references: [id])
+  orderItems        OrderItem[]
+  defaultOrderItems DefaultOrderItem[]
+}
+
+model ProductType {
+  id                Int          @default(autoincrement())          @id
+  name              String       @unique
+  product           Product[]
+  organizationId    Int
+  organization      Organization       @relation(fields:[organizationId], references: [id])
 }
 
 model Order {
@@ -110,11 +141,18 @@ model Order {
   clientId       String
   organizationId Int
   totalPrice     Float        @default(0)
-  status         String       @default("pending")
+  status         OrderStatus  @default(pending)
   createdAt      DateTime     @default(now())
   client         Client       @relation(fields: [clientId], references: [phoneNumber])
   organization   Organization @relation(fields: [organizationId],   references: [id])
   items          OrderItem[]
+}
+
+enum OrderStatus {
+  pending
+  shipped
+  completed
+  recused
 }
 
 model OrderItem{
@@ -129,21 +167,19 @@ model OrderItem{
 
 model Message {
   id               Int      @id @default(autoincrement())
-  whatsappMessageId String?  @unique  // Message ID from WhatsApp-web.js
+  whatsappMessageId String? @unique
   content          String?
   sentAt           DateTime @default(now())
-  fromMe           Boolean  @default(false) // True if sent by the organization, False if from client
-  status           String   @default("sent") // Message status: "sent", "delivered", "read", "failed"
+  fromMe           Boolean  @default(false)
+  status           String   @default("sent")
 
-  // Media Support
   mediaUrl        String?
-  mediaType       String?   // Example: "image", "video", "audio", "document"
+  mediaType       String?
 
-  // Message Type
-  messageType     String    @default("text") // "text", "image", "video", "audio", "location", "sticker", "document"
+  messageType     String    @default("text")
 
   // Chat Context
-  chatId          String    // The chat session ID from WhatsApp-web.js
+  chatId          String
   clientId        String
   client          Client    @relation(fields: [clientId], references: [phoneNumber])
 

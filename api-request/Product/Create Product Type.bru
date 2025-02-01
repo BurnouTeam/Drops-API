@@ -1,13 +1,17 @@
 meta {
-  name: Create Product for Specific Organization
+  name: Create Product Type
   type: http
-  seq: 5
+  seq: 6
 }
 
 post {
-  url: {{api_url}}/product
+  url: {{api_url}}/product/:organizationId
   body: json
   auth: none
+}
+
+params:path {
+  organizationId: 
 }
 
 headers {
