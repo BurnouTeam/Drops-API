@@ -1,3 +1,5 @@
+import { validateOrReject } from 'class-validator';
+
 export class User {
   id: number;
   name: string;
@@ -9,5 +11,6 @@ export class User {
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
+    validateOrReject(this);
   }
 }

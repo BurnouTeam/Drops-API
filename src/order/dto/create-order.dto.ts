@@ -1,5 +1,6 @@
-import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray } from 'class-validator';
+import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
+import { OrderStatus } from '../entities/order.entity';
 
 class CreateOrderItemDto {
   @IsNumber()
@@ -24,8 +25,8 @@ export class CreateOrderDto {
   @IsPositive()
   totalPrice: number;
 
-  @IsString()
-  status: string;
+  @IsEnum(OrderStatus)
+  status: OrderStatus;
 
   @IsArray()
   @ValidateNested({ each: true })

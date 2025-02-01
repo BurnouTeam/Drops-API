@@ -10,16 +10,25 @@ import {
   Query,
 } from '@nestjs/common';
 import { ProductService } from './product.service';
-import { CreateProductDto } from './dto/create-product.dto';
+import {
+  CreateProductDto,
+  CreateProductTypeDto,
+  CreateProductWithTypeDto,
+} from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { DeleteProductDto } from './dto/delete-product.dto';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  create(
+    @Body() createProductDto: CreateProductDto & CreateProductWithTypeDto,
+  ) {
+    if (createProductDto.type) {
+      return this.productService.createProductAndType(createProductDto);
+    }
+
     const input = {
       name: createProductDto.name,
       price: createProductDto.price,
@@ -33,12 +42,28 @@ export class ProductController {
     return this.productService.create(input);
   }
 
+  @Post('/type')
+  createType(@Body() createProductTypeDto: CreateProductTypeDto) {
+    const input = {
+      name: createProductTypeDto.name,
+      organization: {
+        connect: { id: createProductTypeDto.organizationId },
+      },
+    };
+    return this.productService.createProductType(input);
+  }
+
   @Get(':organizationId')
   findAll(
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Query('fields') fields?: string,
+    @Query('include') include?: boolean,
   ) {
-    return this.productService.find({ fields, where: { organizationId } });
+    return this.productService.find({
+      fields,
+      where: { organizationId },
+      include: include,
+    });
   }
 
   @Get(':organizationId/:id')
