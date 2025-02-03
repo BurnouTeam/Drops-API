@@ -13,7 +13,7 @@ import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 
-@Controller('message')
+@Controller('org')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
@@ -57,7 +57,7 @@ export class MessageController {
     return this.messageService.create(input);
   }
 
-  @Get(':organizationId/:clientPhoneNumber')
+  @Get(':organizationId/chat/:clientPhoneNumber/messages')
   findAll(
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Param('clientPhoneNumber') clientPhoneNumber: string,

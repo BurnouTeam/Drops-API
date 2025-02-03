@@ -1,0 +1,16 @@
+meta {
+  name: Overview Clients
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{api_url}}/client/overview/:time/:organizationId
+  body: none
+  auth: none
+}
+
+params:path {
+  time: month
+  organizationId: 2
+}

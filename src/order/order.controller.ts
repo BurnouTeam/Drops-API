@@ -22,7 +22,7 @@ export class OrderController {
     return this.orderService.createOrder(createOrderDto);
   }
 
-  @Post('/default')
+  @Post('default')
   createDefaultOrder(@Body() createOrderDto: CreateOrderDto) {
     // return this.orderService.createDefaultOrder();
   }
@@ -45,6 +45,17 @@ export class OrderController {
     return this.orderService.findAllOrders({
       where: { organizationId },
     });
+  }
+
+  @Get('overview/:time/:organizationId')
+  getOrderOverview(
+    @Param('time') time: string,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
+    return this.orderService.getTodaysOrdersAndCompletedSum(
+      time,
+      organizationId,
+    );
   }
 
   @Get(':organizationId/:id')
@@ -125,4 +136,5 @@ export class OrderController {
   ): Promise<any> {
     return this.orderService.getOrderProductsByOrganizationId(organizationId);
   }
+
 }
