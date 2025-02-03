@@ -1,0 +1,16 @@
+meta {
+  name: Overview Orders
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{api_url}}/order/overview/:time/:organizationId
+  body: none
+  auth: none
+}
+
+params:path {
+  time: month
+  organizationId: 2
+}

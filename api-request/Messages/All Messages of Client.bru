@@ -1,11 +1,11 @@
 meta {
-  name: List Messages from a Client
+  name: All Messages of Client
   type: http
   seq: 1
 }
 
 get {
-  url: {{api_url}}/message/:organizationId/:clientNumber
+  url: {{api_url}}/org/:organizationId/chat/:clientNumber
   body: json
   auth: none
 }

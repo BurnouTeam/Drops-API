@@ -46,6 +46,14 @@ export class ClientController {
     return this.clientService.find({ fields, where: { organizationId } });
   }
 
+  @Get('overview/:time/:organizationId')
+  getClientsOverview(
+    @Param('time') time: string,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
+    return this.clientService.getNewClients({ data: { time, organizationId } });
+  }
+
   @Get(':organizationId/:phoneNumber')
   findOne(
     @Param('organizationId', ParseIntPipe) organizationId: number,

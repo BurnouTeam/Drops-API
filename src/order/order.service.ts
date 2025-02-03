@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
@@ -9,6 +10,8 @@ import { CreateOrderDto } from './dto/create-order.dto';
 
 @Injectable()
 export class OrderService {
+  private readonly logger = new Logger(OrderService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async order(params: {
@@ -306,5 +309,79 @@ export class OrderService {
 
     // return orders;
     return products;
+  }
+
+  log() {
+    this.logger.log('Hello');
+  }
+
+  async getTodaysOrdersAndCompletedSum(
+    time: string,
+    organizationId: number,
+  ): Promise<{
+    ordersCount: number;
+    completedSum: number;
+  }> {
+    const today = new Date();
+    let startDate: Date;
+    let endDate: Date;
+
+    switch (time) {
+      case 'day':
+        startDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        );
+        startDate.setUTCHours(0, 0, 0, 0);
+        endDate = today;
+        break;
+      case 'month':
+        startDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        );
+        startDate.setUTCHours(0, 0, 0, 0);
+        startDate.setUTCDate(1);
+        endDate = today;
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const allOrdersCount = await this.prisma.order.count({
+        where: {
+          createdAt: {
+            gte: startDate,
+            lt: endDate,
+          },
+          organizationId,
+        },
+      });
+
+      const completedSum = await this.prisma.order.aggregate({
+        where: {
+          updatedAt: {
+            gte: startDate,
+            lt: endDate,
+          },
+          status: 'completed',
+          organizationId,
+        },
+        _sum: {
+          totalPrice: true,
+        },
+      });
+
+      return {
+        ordersCount: allOrdersCount,
+        completedSum: completedSum._sum.totalPrice ?? 0,
+      };
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error;
+    }
   }
 }

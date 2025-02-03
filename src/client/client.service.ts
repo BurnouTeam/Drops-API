@@ -83,4 +83,60 @@ export class ClientService {
 
     return client.defaultOrder;
   }
+
+  async getNewClients(params: {
+    data?: {
+      time: string;
+      organizationId: number;
+    };
+  }): Promise<{ clientsCount: number }> {
+    const today = new Date();
+    let startDate: Date;
+    let endDate: Date;
+
+    const { data } = params;
+
+    switch (data.time) {
+      case 'day':
+        startDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        );
+        startDate.setUTCHours(0, 0, 0, 0);
+        endDate = today;
+        break;
+      case 'month':
+        startDate = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        );
+        startDate.setUTCHours(0, 0, 0, 0);
+        startDate.setUTCDate(1);
+        endDate = today;
+        break;
+      default:
+        break;
+    }
+
+    try {
+      const allClientsCount = await this.prisma.client.count({
+        where: {
+          createdAt: {
+            gte: startDate,
+            lt: endDate,
+          },
+          organizationId: data.organizationId,
+        },
+      });
+
+      return {
+        clientsCount: allClientsCount,
+      };
+    } catch (error) {
+      console.error('Error fetching clients:', error);
+      throw error;
+    }
+  }
 }
