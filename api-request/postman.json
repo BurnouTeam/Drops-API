@@ -1,0 +1,1831 @@
+{
+  "info": {
+    "name": "api-request",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/auth/login",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\":\"danteeng@hotmail.com\",\n  \"password\":\"drops123456\",\n  \"organizationId\":2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Refresh",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/auth/refresh",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Signup",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/auth/signup",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "auth",
+                "signup"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Paulo Victor\",\n  \"email\": \"pvictorc@gmail.com\",\n  \"password\": \"drops123456\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bot",
+      "item": [
+        {
+          "name": "Webhook",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/bwh",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "bwh"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventType\":\"client.update\",\n  \"data\":{\n    \"message\": \"Hello\",\n    \"value\": 1\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Client",
+      "item": [
+        {
+          "name": "Client Detail",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/:organizationId/:phoneNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":organizationId",
+                ":phoneNumber"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "phoneNumber",
+                  "value": "+5585987552383"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Client of 1 Organization",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\nname: string;\nphoneNumber: string;\nemail: string;\nprofilePhoto?: string;\norganizationId: number;\n",
+            "url": {
+              "raw": "{{api_url}}/client",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Filipe Cavalcanti\",\n  \"email\": \"lipeaoc@gmail.com\",\n  \"phoneNumber\": \"+5585991094233\",\n  \"street\":\"Washington Soares\",\n  \"number\":\"1010\",\n  \"complement\":\"em frente ao Wesley Safadão Trade Center\",\n  \"neighborhood\":\"Edson Queiroz\",\n  \"city\":\"Fortaleza\",\n  \"state\":\"Ceará\",\n  \"cep\":\"60160070\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Client",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/:organizationId/:phoneNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":organizationId",
+                ":phoneNumber"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "phoneNumber",
+                  "value": "+5585996102553"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Clients of an Organization",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/:organizationId?fields=name,phoneNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":organizationId?fields=name,phoneNumber"
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "name,phoneNumber"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Overview Clients",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/overview/:time/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                "overview",
+                ":time",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "time",
+                  "value": "month"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Clients by Id of an Organization",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um cliente desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Dante de Araújo Clementino\",\n  \"email\": \"danteeng@hotmail.com\",\n  \"phoneNumber\": \"+5585996105145\",\n  \"street\":\"Rua Antonele Bezerra\",\n  \"number\":\"255\",\n  \"complement\":\"Em frente ao Edificio Bossa Nova\",\n  \"neighborhood\":\"Meireles\",\n  \"city\":\"Fortaleza\",\n  \"state\":\"Ceará\",\n  \"cep\":\"60160070\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/client/:phoneNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":phoneNumber"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "phoneNumber",
+                  "value": "+5585996105145"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dante de Araújo Clementino\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "All Chats",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/org/:organizationId/chat/:clientNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "org",
+                ":organizationId",
+                "chat",
+                ":clientNumber"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clientNumber",
+                  "value": "+5585996105145"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "All Messages of Client",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/org/:organizationId/chat/:clientNumber",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "org",
+                ":organizationId",
+                "chat",
+                ":clientNumber"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clientNumber",
+                  "value": "+5585996105145"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Message From Client",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/message/from",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "message",
+                "from"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chatId\": \"\",\n  \"whatsappMessageId\": \"\",\n  \"content\": \"\",\n  \"fromMe\": false,\n  \"status\": \"\",\n  \"mediaUrl\": \"\",\n  \"mediaType\": \"\",\n  \"messageType\": \"\",\n  \"clientId\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Message To User",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/message/to",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "message",
+                "to"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chatId\": \"\",\n  \"whatsappMessageId\": \"\",\n  \"content\": \"\",\n  \"fromMe\": true,\n  \"status\": \"\",\n  \"mediaUrl\": \"\",\n  \"mediaType\": \"\",\n  \"messageType\": \"\",\n  \"clientId\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Message",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/product/:organizationId/:clientId/:messageId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":organizationId",
+                ":clientId",
+                ":messageId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "clientId",
+                  "value": ""
+                },
+                {
+                  "key": "messageId",
+                  "value": ""
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Message Detail",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/message/:organizationId/:clientId/:messageId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "message",
+                ":organizationId",
+                ":clientId",
+                ":messageId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "messageId",
+                  "value": ""
+                },
+                {
+                  "key": "clientId",
+                  "value": ""
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Message of a Client",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um produto desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/message/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "message",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"chatId\": \"\",\n  \"whatsappMessageId\": \"\",\n  \"content\": \"\",\n  \"fromMe\": true,\n  \"status\": \"\",\n  \"mediaUrl\": \"\",\n  \"mediaType\": \"\",\n  \"messageType\": \"\",\n  \"clientId\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "Cancel Order",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um produto desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/order/next/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                "next",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientPhoneNumber\": \"+5585996105145\",\n  \"organizationId\": 2,\n  \"totalPrice\": 240,\n  \"status\": \"Pending\",\n    \"items\":[{\n    \"productId\":1,\n    \"quantity\":12,\n    \"price\":20\n  }]\n\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create an Order",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/order/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientPhoneNumber\": \"+5585996105145\",\n  \"organizationId\": 2,\n  \"totalPrice\": 20,\n  \"status\": \"Pending\",\n  \"items\":[{\n    \"productId\":1,\n    \"quantity\":10,\n    \"price\":20\n  }]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Order",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/order/:organizationId/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":organizationId",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                },
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Evolve Order",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um produto desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/order/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientPhoneNumber\": \"+5585996105145\",\n  \"organizationId\": 2,\n  \"totalPrice\": 240,\n  \"status\": \"Pending\",\n    \"items\":[{\n    \"productId\":1,\n    \"quantity\":12,\n    \"price\":20\n  }]\n\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Order Detail",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/order/:organizationId/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":organizationId",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Orders for all status",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/order/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Overview Orders",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/order/overview/:time/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                "overview",
+                ":time",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "time",
+                  "value": "month"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order by Id of an Organization",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um produto desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/order/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "order",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientPhoneNumber\": \"+5585996105145\",\n  \"organizationId\": 2,\n  \"totalPrice\": 240,\n  \"status\": \"Pending\",\n    \"items\":[{\n    \"productId\":1,\n    \"quantity\":12,\n    \"price\":20\n  }]\n\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "OrderItem",
+          "item": [
+            {
+              "name": "Add an Product to an Order",
+              "event": [],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "auth": {
+                  "type": "noauth"
+                },
+                "description": "",
+                "url": {
+                  "raw": "{{api_url}}/order-item",
+                  "protocol": "",
+                  "host": [
+                    "{{api_url}}"
+                  ],
+                  "path": [
+                    "order-item"
+                  ],
+                  "query": [],
+                  "variable": []
+                }
+              }
+            },
+            {
+              "name": "List Items of an Order",
+              "event": [],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "disabled": false,
+                    "type": "default"
+                  },
+                  {
+                    "key": "User-Agent",
+                    "value": "insomnia/10.2.0",
+                    "disabled": false,
+                    "type": "default"
+                  }
+                ],
+                "auth": {
+                  "type": "noauth"
+                },
+                "description": "",
+                "url": {
+                  "raw": "{{api_url}}/order/:organizationId?fields=client,items,totalPrice",
+                  "protocol": "",
+                  "host": [
+                    "{{api_url}}"
+                  ],
+                  "path": [
+                    "order",
+                    ":organizationId?fields=client,items,totalPrice"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields",
+                      "value": "client,items,totalPrice"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "key": "organizationId",
+                      "value": "2"
+                    }
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Organization",
+      "item": [
+        {
+          "name": "Create one Organization",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\nname: string;\nphoneNumber: string;\nprofilePhoto?: string;\n\n",
+            "url": {
+              "raw": "{{api_url}}/organization",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "organization"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Drops\",\n  \"email\": \"drops@hotmail.com\",\n  \"profilePhoto\": \"\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Organizations",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/organization",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "organization"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Update Organization by Id",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\":\"Drielle Furtado\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product",
+      "item": [
+        {
+          "name": "Create Product Type",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/product/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Create Product for Specific Organization",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/product",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/product/:organizationId/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":organizationId",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                },
+                {
+                  "key": "id",
+                  "value": "3"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Products of an Organization",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/product/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Product Detail",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/product/:organizationId/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":organizationId",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "1"
+                },
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Product by Id of an Organization",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Faz update em um produto desde que passe o id da organização e seu id.\n\n{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+            "url": {
+              "raw": "{{api_url}}/product/:id",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "5"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Create User of 1 Organization",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Expects:\n\nname: string;\nphoneNumber: string;\nemail: string;\nprofilePhoto?: string;\norganizationId: number;\n",
+            "url": {
+              "raw": "{{api_url}}/user/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "user",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": ""
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dante de Araújo\",\n  \"email\": \"danteeng@hotmail.com\",\n  \"phoneNumber\": \"+5585996105145\",\n  \"password\": \"dantes123456\",\n  \"organizationId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List Users of an Organization",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "disabled": false,
+                "type": "default"
+              },
+              {
+                "key": "User-Agent",
+                "value": "insomnia/10.2.0",
+                "disabled": false,
+                "type": "default"
+              }
+            ],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/client/:organizationId",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "client",
+                ":organizationId"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "api_url",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
