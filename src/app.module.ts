@@ -13,6 +13,7 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { MessageModule } from './message/message.module';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { MessageModule } from './message/message.module';
       delimiter: '.',
     }),
     ConfigModule.forRoot(),
+    HttpModule,
     PrismaModule,
     UsersModule,
     AuthModule,

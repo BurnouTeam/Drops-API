@@ -1,0 +1,26 @@
+meta {
+  name: Send Message
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api_url}}/bwh
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "eventType":"client.update",
+    "data":{
+      "message": "Hello",
+      "value": 1
+    }
+  }
+}
