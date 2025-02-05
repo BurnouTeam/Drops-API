@@ -338,19 +338,19 @@
             },
             "description": "",
             "url": {
-              "raw": "{{api_url}}/client/:organizationId?fields=name,phoneNumber",
+              "raw": "{{api_url}}/client/:organizationId?fields",
               "protocol": "",
               "host": [
                 "{{api_url}}"
               ],
               "path": [
                 "client",
-                ":organizationId?fields=name,phoneNumber"
+                ":organizationId?fields"
               ],
               "query": [
                 {
                   "key": "fields",
-                  "value": "name,phoneNumber"
+                  "value": ""
                 }
               ],
               "variable": [
@@ -1473,7 +1473,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "raw": "{\n  \"name\": \"Água Azul\",\n  \"price\": 7.0,\n  \"quantity\": 15,\n  \"details\": \"Direto da lagoa Azul\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2,\n  \"type\": {\n    \"name\":\"5L\",\n    \"organizationId\": 2\n  }\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1519,7 +1519,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "raw": "{\n  \"name\": \"Água Teste\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2,\n  \"typeId\": 1\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1695,18 +1695,54 @@
               "variable": [
                 {
                   "key": "id",
-                  "value": "5"
+                  "value": "1"
                 }
               ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"organizationId\": 2\n}",
+              "raw": "{\n  \"name\": \"Água Benta\",\n  \"price\": 10.0,\n  \"quantity\": 20,\n  \"details\": \"Uma água de igreja santa muito boa\",\n  \"imageUrl\": \"\",\n  \"typeId\": 1,\n  \"organizationId\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"
                 }
               }
+            }
+          }
+        },
+        {
+          "name": "List Types",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{api_url}}/product/types/:organizationId?fields=id,name",
+              "protocol": "",
+              "host": [
+                "{{api_url}}"
+              ],
+              "path": [
+                "product",
+                "types",
+                ":organizationId?fields=id,name"
+              ],
+              "query": [
+                {
+                  "key": "fields",
+                  "value": "id,name"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "organizationId",
+                  "value": "2"
+                }
+              ]
             }
           }
         }
@@ -1752,13 +1788,13 @@
               "variable": [
                 {
                   "key": "organizationId",
-                  "value": ""
+                  "value": "2"
                 }
               ]
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Dante de Araújo\",\n  \"email\": \"danteeng@hotmail.com\",\n  \"phoneNumber\": \"+5585996105145\",\n  \"password\": \"dantes123456\",\n  \"organizationId\": 1\n}",
+              "raw": "{\n  \"name\": \"Dante de Araújo\",\n  \"email\": \"danteeng@hotmail.com\",\n  \"phoneNumber\": \"+5585996105145\",\n  \"password\": \"drops123456\",\n  \"organizationId\": 2\n}",
               "options": {
                 "raw": {
                   "language": "json"

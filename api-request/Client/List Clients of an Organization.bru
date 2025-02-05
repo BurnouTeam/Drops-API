@@ -5,13 +5,13 @@ meta {
 }
 
 get {
-  url: {{api_url}}/client/:organizationId?fields=name,phoneNumber
+  url: {{api_url}}/client/:organizationId?fields
   body: json
   auth: none
 }
 
 params:query {
-  fields: name,phoneNumber
+  fields: 
 }
 
 params:path {

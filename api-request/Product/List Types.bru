@@ -1,0 +1,19 @@
+meta {
+  name: List Types
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{api_url}}/product/types/:organizationId?fields=id,name
+  body: none
+  auth: none
+}
+
+params:query {
+  fields: id,name
+}
+
+params:path {
+  organizationId: 2
+}

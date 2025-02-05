@@ -59,6 +59,33 @@ export class CreateProductWithTypeDto {
   type: ProductType;
 }
 
+export class CreateProductWithType {
+  @IsString()
+  name: string;
+
+  @IsNumber()
+  @IsPositive()
+  price: number;
+
+  @IsNumber()
+  @IsPositive()
+  quantity: number;
+
+  @IsOptional()
+  @IsString()
+  details?: string;
+
+  @IsOptional()
+  @IsUrl()
+  imageUrl?: string;
+
+  @IsNumber()
+  organizationId: number;
+
+  @IsNumber()
+  typeId: number;
+}
+
 export class CreateProductTypeDto {
   @IsString()
   name: string;

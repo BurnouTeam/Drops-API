@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Product, Prisma } from '@prisma/client';
+import { Product, Prisma, ProductType } from '@prisma/client';
 import { CreateProductWithTypeDto } from './dto/create-product.dto';
 
 @Injectable()
@@ -67,6 +67,60 @@ export class ProductService {
     }
 
     const results = await this.prisma.product.findMany(queryOptions);
+
+    return results.map(({ ...data }) => {
+      if (include) {
+        Object.keys(data).forEach((key) => {
+          if (key.endsWith('Id')) {
+            delete data[key];
+          }
+        });
+      }
+      return data;
+    });
+  }
+
+  async findTypes(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.ProductWhereUniqueInput;
+    where?: Prisma.ProductWhereInput;
+    orderBy?: Prisma.ProductOrderByWithRelationInput;
+    fields?: string;
+    include?: boolean;
+  }): Promise<Partial<ProductType>[]> {
+    const { skip, take, cursor, where, orderBy, fields, include } = params;
+
+    let queryOptions: any = { skip, take, cursor, where, orderBy };
+
+    const relationsMap = {
+      organizationId: 'organization',
+    };
+
+    if (fields) {
+      queryOptions.select = fields.split(',').reduce(
+        (acc, field) => {
+          field = field.trim();
+          if (relationsMap[field]) {
+            acc[relationsMap[field]] = true; // Se for um ID, inclui o relacionamento
+          } else {
+            acc[field] = true;
+          }
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+    } else {
+      queryOptions.include = Object.values(relationsMap).reduce(
+        (acc, relation) => {
+          acc[relation] = true;
+          return acc;
+        },
+        {} as Record<string, boolean>,
+      );
+    }
+
+    const results = await this.prisma.productType.findMany(queryOptions);
 
     return results.map(({ ...data }) => {
       if (include) {

@@ -13,6 +13,7 @@ import { ProductService } from './product.service';
 import {
   CreateProductDto,
   CreateProductTypeDto,
+  CreateProductWithType,
   CreateProductWithTypeDto,
 } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -23,10 +24,29 @@ export class ProductController {
 
   @Post()
   create(
-    @Body() createProductDto: CreateProductDto & CreateProductWithTypeDto,
+    @Body()
+    createProductDto: CreateProductDto &
+      CreateProductWithTypeDto &
+      CreateProductWithType,
   ) {
     if (createProductDto.type) {
       return this.productService.createProductAndType(createProductDto);
+    }
+    if (createProductDto.typeId) {
+      const input = {
+        name: createProductDto.name,
+        price: createProductDto.price,
+        quantity: createProductDto.quantity,
+        details: createProductDto.details,
+        imageUrl: createProductDto.imageUrl,
+        organization: {
+          connect: { id: createProductDto.organizationId },
+        },
+        type: {
+          connect: { id: createProductDto.typeId },
+        },
+      };
+      return this.productService.create(input);
     }
 
     const input = {
@@ -63,6 +83,17 @@ export class ProductController {
       fields,
       where: { organizationId },
       include: include,
+    });
+  }
+
+  @Get('types/:organizationId')
+  findAllTypes(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Query('fields') fields?: string,
+  ) {
+    return this.productService.findTypes({
+      fields,
+      where: { organizationId },
     });
   }
 
