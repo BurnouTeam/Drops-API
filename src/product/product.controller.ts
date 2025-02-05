@@ -97,6 +97,17 @@ export class ProductController {
     });
   }
 
+  @Get('types/:id')
+  findByTypes(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('fields') fields?: string,
+  ) {
+    return this.productService.findTypes({
+      fields,
+      where: { id },
+    });
+  }
+
   @Get(':organizationId/:id')
   findOne(
     @Param('organizationId', ParseIntPipe) organizationId: number,
