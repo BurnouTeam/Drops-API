@@ -97,14 +97,13 @@ model Client {
 }
 
 model DefaultOrder {
-  id        Int       @default(autoincrement()) @id
-  client    Client?
-  clientId  String?
-  updatedAt     DateTime @default(now()) @updatedAt
-  items     DefaultOrderItem[]
-  paymentMethod  PaymentMethod   @default(PIX)  // Default to PIX
-  organizationId   Int
-  organization   Organization @relation(fields: [organizationId],   references: [id])
+  id             Int           @default(autoincrement())   @id
+  client         Client?
+  updatedAt      DateTime      @default(now())             @updatedAt
+  items          DefaultOrderItem[]
+  paymentMethod  PaymentMethod @default(PaymentMethod.PIX) //                Default     to PIX
+  organizationId Int
+  organization   Organization  @relation(fields:           [organizationId], references: [id])
 }
 
 model DefaultOrderItem {
