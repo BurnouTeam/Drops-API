@@ -86,6 +86,17 @@ export class ProductController {
     });
   }
 
+  @Get('available/:organizationId')
+  findAvailableProducts(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Query('include') include?: boolean,
+  ) {
+    return this.productService.findAvailableProducts({
+      organizationId,
+      include: include,
+    });
+  }
+
   @Get('types/:organizationId')
   findAllTypes(
     @Param('organizationId', ParseIntPipe) organizationId: number,

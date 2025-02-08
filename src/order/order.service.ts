@@ -147,7 +147,12 @@ export class OrderService {
         const { productId, quantity } = item;
 
         const product = await prisma.product.findUnique({
-          where: { id: productId },
+          where: {
+            id: productId,
+            organization: {
+              id: organizationId,
+            },
+          },
         });
 
         if (!product) {
@@ -190,6 +195,9 @@ export class OrderService {
         where: { id: createdOrder.id, organizationId },
         data: {
           totalPrice,
+          items: {
+            connect: orderItems.map((item) => ({ id: item.id })),
+          },
         },
       });
 

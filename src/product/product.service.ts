@@ -33,7 +33,7 @@ export class ProductService {
   }): Promise<Partial<Product>[]> {
     const { skip, take, cursor, where, orderBy, fields, include } = params;
 
-    let queryOptions: any = { skip, take, cursor, where, orderBy };
+    const queryOptions: any = { skip, take, cursor, where, orderBy };
 
     const relationsMap = {
       organizationId: 'organization',
@@ -80,6 +80,40 @@ export class ProductService {
     });
   }
 
+  async findAvailableProducts(params: {
+    skip?: number; // Skip first X elements
+    take?: number; // Return X elements
+    cursor?: Prisma.ProductWhereUniqueInput; // Start from the nth element
+    orderBy?: Prisma.ProductOrderByWithRelationInput;
+    include?: boolean;
+    organizationId?: number;
+  }): Promise<Partial<Product>[]> {
+    const { skip, take, cursor, orderBy, include, organizationId } = params;
+
+    const queryOptions: any = { skip, take, cursor, orderBy };
+    queryOptions.where = {
+      quantity: {
+        gt: 0,
+      },
+      organization: {
+        id: organizationId,
+      },
+    };
+
+    const results = await this.prisma.product.findMany(queryOptions);
+
+    return results.map(({ ...data }) => {
+      if (include) {
+        Object.keys(data).forEach((key) => {
+          if (key.endsWith('Id')) {
+            delete data[key];
+          }
+        });
+      }
+      return data;
+    });
+  }
+
   async findTypes(params: {
     skip?: number;
     take?: number;
@@ -91,7 +125,7 @@ export class ProductService {
   }): Promise<Partial<ProductType>[]> {
     const { skip, take, cursor, where, orderBy, fields, include } = params;
 
-    let queryOptions: any = { skip, take, cursor, where, orderBy };
+    const queryOptions: any = { skip, take, cursor, where, orderBy };
 
     const relationsMap = {
       organizationId: 'organization',
