@@ -102,6 +102,7 @@ model DefaultOrder {
   clientId  String?
   updatedAt     DateTime @default(now()) @updatedAt
   items     DefaultOrderItem[]
+  paymentMethod  PaymentMethod   @default(PIX)  // Default to PIX
   organizationId   Int
   organization   Organization @relation(fields: [organizationId],   references: [id])
 }

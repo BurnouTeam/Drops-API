@@ -1,0 +1,20 @@
+meta {
+  name: Client Default Order
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{api_url}}/order/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 2
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}

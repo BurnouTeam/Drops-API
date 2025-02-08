@@ -5,8 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Order, Prisma } from '@prisma/client';
+import { DefaultOrder, Order, Prisma } from '@prisma/client';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { CreateDefaultOrderDto } from './dto/create-default-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -120,13 +121,15 @@ export class OrderService {
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-    const { items, clientPhoneNumber, organizationId } = createOrderDto;
+    const { items, clientPhoneNumber, organizationId, paymentMethod } =
+      createOrderDto;
 
     const order = await this.prisma.$transaction(async (prisma) => {
       const createdOrder = await prisma.order.create({
         data: {
           totalPrice: 0,
           status: 'pending',
+          paymentMethod: paymentMethod,
           organization: {
             connect: {
               id: organizationId,
@@ -200,15 +203,88 @@ export class OrderService {
           },
         },
       });
+      // Create PaymentDetails based on the payment method
+      const paymentDetails = await prisma.paymentDetails.create({
+        data: {
+          orderId: createdOrder.id,
+          paidAmount: 0, // We assume the payment has not been made at this point
+          status: 'PENDING', // Payment status is pending initially
+          // TODO: Here you can add logic to generate the Pix code or transaction ID
+          pixCode: paymentMethod === 'PIX' ? await this.generatePixCode(createdOrder.id, totalPrice) : null,
+          transactionId: paymentMethod === 'CREDIT_CARD' ? await this.processCreditCardPayment() : null,
+        },
+      });
 
       return {
         ...createdOrder,
         totalPrice,
         items: orderItems,
+        paymentDetails: paymentDetails,
       };
     });
 
     return order;
+  }
+
+  async createDefaultOrderFromOrder(createDefaultOrderDto: CreateDefaultOrderDto): Promise<DefaultOrder> {
+    const { orderId, organizationId } = createDefaultOrderDto;
+    const order = await this.prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: true, client: true },
+    });
+
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+
+    if (!order.client) {
+      throw new BadRequestException(`Order with ID ${orderId} dont have any Client`);
+    }
+
+    const client = order.client;
+
+    // Check if a default order already exists for this client
+    // if (client.defaultOrderId) {
+    //   throw new BadRequestException(
+    //     `Client already has a default order.  ${client.defaultOrderId}`,
+    //   );
+    // }
+
+    return this.prisma.$transaction(async (prisma) => {
+
+      // Create DefaultOrder with associated DefaultOrderItems
+      const defaultOrder = await prisma.defaultOrder.create({
+        data: {
+          client: {
+            connect: {
+              phoneNumber: client.phoneNumber,
+            },
+          },
+          paymentMethod: order.paymentMethod,
+          organization: {
+            connect: {
+              id: order.organizationId,
+            },
+          },
+          items: {
+            create: order.items.map((item) => ({
+              productId: item.productId,
+              quantity: item.quantity,
+            })),
+          },
+        },
+      });
+
+      // Update the client to associate with the new default order
+      await prisma.client.update({
+        where: { phoneNumber: client.phoneNumber },
+        data: {
+          defaultOrderId: defaultOrder.id,
+        },
+      });
+
+      return defaultOrder;
+    });
   }
 
   async update(params: {
@@ -234,10 +310,6 @@ export class OrderService {
       data: { status: newStatus },
       where,
     });
-  }
-
-  async createDefaultOrder() {
-    return 'yes';
   }
 
   async recuseOrder(params: {
@@ -319,10 +391,6 @@ export class OrderService {
     return products;
   }
 
-  log() {
-    this.logger.log('Hello');
-  }
-
   async getTodaysOrdersAndCompletedSum(
     time: string,
     organizationId: number,
@@ -391,5 +459,71 @@ export class OrderService {
       console.error('Error fetching orders:', error);
       throw error;
     }
+  }
+
+  async createDefaultOrder(clientId: string) {
+    // Get all available products (you can add filters)
+    const products = await this.prisma.product.findMany();
+
+    if (products.length === 0) {
+      throw new Error('No products available to create a default order.');
+    }
+
+    // Create DefaultOrder with associated DefaultOrderItems
+    const defaultOrder = await this.prisma.defaultOrder.create({
+      data: {
+        clientId,
+        items: {
+          create: products.map((product) => ({
+            productId: product.id,
+            quantity: 1, // Default quantity can be adjusted
+          })),
+        },
+      },
+      include: { items: true },
+    });
+
+    return defaultOrder;
+  }
+  async getDefaultOrderForClient(
+    params: {clientId:string,organizationId:number},
+  ): Promise<DefaultOrder | null> {
+      const client = await this.prisma.client.findUnique({
+        where: { phoneNumber: params.clientId, organizationId: params.organizationId },
+        include: {
+          defaultOrder: {
+            include: {
+              items: {
+                include: {
+                  product: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!client) {
+        throw new NotFoundException(`Client with ID ${params.clientId} not found`);
+      }
+
+      if (!client.defaultOrder) {
+        return null;
+      }
+
+      return client.defaultOrder;
+    }
+  }
+
+  // TODO: REMOVE FROM HERE
+  // Example method to generate a Pix code (for illustration purposes)
+  async generatePixCode(orderId: number, totalPrice: number): Promise<string> {
+    // Logic to generate the Pix code for the order
+    return `PixCodeForOrder_${orderId}_${totalPrice}`;
+  }
+
+  // Example method to process a Credit Card payment (for illustration purposes)
+  async processCreditCardPayment(): Promise<string> {
+    return `TransactionId_${Math.random().toString(36).substring(2)}`;
   }
 }

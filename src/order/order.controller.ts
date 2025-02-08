@@ -27,6 +27,17 @@ export class OrderController {
     // return this.orderService.createDefaultOrder();
   }
 
+  @Get('client/:clientPhoneNumber/:organizationId')
+  getClientDefaultOrder(
+    @Param('clientPhoneNumber') clientPhoneNumber: string,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
+    return this.orderService.getDefaultOrderForClient({
+      clientId: clientPhoneNumber,
+      organizationId,
+    });
+  }
+
   // @Get(':organizationId')
   // findAll(
   //   @Param('organizationId', ParseIntPipe) organizationId: number,

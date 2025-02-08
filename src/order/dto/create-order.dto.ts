@@ -2,6 +2,13 @@ import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, 
 import { Type } from 'class-transformer';
 import { OrderStatus } from '../entities/order.entity';
 
+enum PaymentMethod {
+  PIX = 'PIX',
+  CASH = 'CASH',
+  CREDIT_CARD = 'CREDIT_CARD',
+  BANK_TRANSFER = 'BANK_TRANSFER',
+}
+
 class CreateOrderItemDto {
   @IsNumber()
   productId: number;
@@ -27,6 +34,9 @@ export class CreateOrderDto {
 
   @IsEnum(OrderStatus)
   status: OrderStatus;
+
+  @IsEnum(PaymentMethod)
+  paymentMethod: PaymentMethod;
 
   @IsArray()
   @ValidateNested({ each: true })

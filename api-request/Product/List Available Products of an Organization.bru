@@ -1,0 +1,20 @@
+meta {
+  name: List Available Products of an Organization
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{api_url}}/product/available/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 2
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
