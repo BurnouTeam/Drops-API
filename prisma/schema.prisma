@@ -101,7 +101,7 @@ model DefaultOrder {
   client         Client?
   updatedAt      DateTime      @default(now())             @updatedAt
   items          DefaultOrderItem[]
-  paymentMethod  PaymentMethod @default(PaymentMethod.PIX) //                Default     to PIX
+  paymentMethod  PaymentMethod @default(PIX) //                Default     to PIX
   organizationId Int
   organization   Organization  @relation(fields:           [organizationId], references: [id])
 }
@@ -145,6 +145,7 @@ model Order {
   id             Int          @default(autoincrement()) @id
   clientId       String
   organizationId Int
+  default        Boolean      @default(false)
   totalPrice     Float        @default(0)
   paymentMethod  PaymentMethod   @default(PIX)  // Default to PIX
   status         OrderStatus  @default(pending)
