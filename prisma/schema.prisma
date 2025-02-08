@@ -24,6 +24,7 @@ model Organization {
   clients       Client[]
   products      Product[]
   productTypes  ProductType[]
+  defaultOrders DefaultOrder[]
   orders        Order[]
   roles         Role[]
   messages      Message[]
@@ -101,6 +102,8 @@ model DefaultOrder {
   clientId  String?
   updatedAt     DateTime @default(now()) @updatedAt
   items     DefaultOrderItem[]
+  organizationId   Int
+  organization   Organization @relation(fields: [organizationId],   references: [id])
 }
 
 model DefaultOrderItem {
@@ -143,12 +146,14 @@ model Order {
   clientId       String
   organizationId Int
   totalPrice     Float        @default(0)
+  paymentMethod  PaymentMethod   @default(PIX)  // Default to PIX
   status         OrderStatus  @default(pending)
   createdAt      DateTime     @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
   client         Client       @relation(fields: [clientId], references: [phoneNumber])
   organization   Organization @relation(fields: [organizationId],   references: [id])
   items          OrderItem[]
+  paymentDetails PaymentDetails?
 }
 
 enum OrderStatus {
@@ -190,4 +195,28 @@ model Message {
   organization    Organization @relation(fields: [organizationId], references: [id])
 
   @@index([clientId, organizationId])
+}
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  CASH
+  BANK_TRANSFER
+}
+model PaymentDetails {
+  id         Int           @default(autoincrement()) @id
+  order      Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId    Int           @unique
+  pixCode    String?       // Stores Pix code if used
+  transactionId String?    // Used for credit card payments
+  paidAmount Float         // How much was paid
+  status     PaymentStatus @default(PENDING)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @default(now()) @updatedAt
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
 }
