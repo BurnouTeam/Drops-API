@@ -1,22 +1,21 @@
-import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray, IsEnum } from 'class-validator';
+import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray, IsEnum, IsInt } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OrderStatus } from '../entities/order.entity';
+import { PaymentMethod } from '@prisma/client';
 
-enum PaymentMethod {
-  PIX = 'PIX',
-  CASH = 'CASH',
-  CREDIT_CARD = 'CREDIT_CARD',
-  BANK_TRANSFER = 'BANK_TRANSFER',
-}
 
 class CreateOrderItemDto {
-  @IsNumber()
+  @IsNotEmpty()
+  @IsArray()
   productId: number;
 
-  @IsNumber()
+  @IsInt()
   quantity: number;
 
-  @IsNumber()
+  @IsInt()
+  orderId?: number;
+
+  @IsPositive()
   price: number;
 }
 

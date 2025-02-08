@@ -12,6 +12,8 @@ import {
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { CreateDefaultOrderDto } from './dto/create-default-order.dto';
+import { MakeDefaultOrderDto } from './dto/make-default-order.dto';
 
 @Controller('order')
 export class OrderController {
@@ -22,12 +24,23 @@ export class OrderController {
     return this.orderService.createOrder(createOrderDto);
   }
 
-  @Post('default')
-  createDefaultOrder(@Body() createOrderDto: CreateOrderDto) {
-    // return this.orderService.createDefaultOrder();
+  @Post('default/make')
+  makeAnDefaultOrder(@Body() makeDefaultOrderDto: MakeDefaultOrderDto) {
+    const { clientId, organizationId } = makeDefaultOrderDto;
+    return this.orderService.makeAnDefaultOrder(clientId, organizationId);
   }
 
-  @Get('client/:clientPhoneNumber/:organizationId')
+  @Post('default')
+  createDefaultOrder(@Body() createDefaultOrderDto: CreateDefaultOrderDto) {
+    if (createDefaultOrderDto.items.length > 0) {
+      return this.orderService.createDefaultOrderFromProducts(
+        createDefaultOrderDto,
+      );
+    }
+    return this.orderService.createDefaultOrderFromOrder(createDefaultOrderDto);
+  }
+
+  @Get('default/:clientPhoneNumber/:organizationId')
   getClientDefaultOrder(
     @Param('clientPhoneNumber') clientPhoneNumber: string,
     @Param('organizationId', ParseIntPipe) organizationId: number,
@@ -147,5 +160,4 @@ export class OrderController {
   ): Promise<any> {
     return this.orderService.getOrderProductsByOrganizationId(organizationId);
   }
-
 }

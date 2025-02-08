@@ -5,12 +5,13 @@ meta {
 }
 
 get {
-  url: {{api_url}}/order/:organizationId
+  url: {{api_url}}/order/default/:clientPhoneNumber/:organizationId
   body: json
   auth: none
 }
 
 params:path {
+  clientPhoneNumber: +5585996105145
   organizationId: 2
 }
 

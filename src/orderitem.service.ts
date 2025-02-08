@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma/prisma.service';
 import { OrderItem, Prisma } from '@prisma/client';
+import { CreateOrderItemDto } from './order-item/dto/create-order-item.dto';
 
 @Injectable()
 export class OrderItemService {
@@ -31,11 +32,6 @@ export class OrderItemService {
     });
   }
 
-  async createOrderItem(data: Prisma.OrderItemCreateInput): Promise<OrderItem> {
-    return this.prisma.orderItem.create({
-      data,
-    });
-  }
 
   async updateOrderItem(params: {
     where: Prisma.OrderItemWhereUniqueInput;

@@ -1,0 +1,56 @@
+meta {
+  name: Make an Order from Default Order
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{api_url}}/order/default/:organizationId
+  body: json
+  auth: none
+}
+
+params:path {
+  organizationId: 
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "organizationId":2,
+    "clientId":"+5585996105145",
+    "items": [
+      {
+        "productId":21,
+        "quantity":3
+      }
+    ],
+    "paymentMethod":"PIX"
+  }
+}
+
+docs {
+  Expects one of the two ways
+  
+  1 - A client id, paymentMethod and the items with productid an quantity:
+  
+  {
+    "organizationId":2,
+    "clientId":"+5585996105145",
+    "items": [
+      {
+        "productId":21,
+        "quantity":3
+      }
+    ],
+    "paymentMethod":"PIX"
+  }
+  
+  2 - An organizationId and a orderId so it will copy the order
+  
+  { "organizationId":x, "orderId": i}
+}
