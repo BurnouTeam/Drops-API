@@ -14,6 +14,7 @@ import { OrderModule } from './order/order.module';
 import { OrderItemModule } from './order-item/order-item.module';
 import { MessageModule } from './message/message.module';
 import { HttpModule } from '@nestjs/axios';
+import { WebsocketEventsGateway } from './websocket/websocket.gateway';
 
 @Module({
   imports: [
@@ -37,6 +38,6 @@ import { HttpModule } from '@nestjs/axios';
     BotWebhookModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, WebsocketEventsGateway],
 })
 export class AppModule {}

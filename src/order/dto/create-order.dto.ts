@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray, IsEnum, IsInt } from 'class-validator';
+import { IsNumber, IsString, IsPositive, IsOptional, IsMobilePhone, IsNotEmpty, ValidateNested, IsArray, IsEnum, IsInt, IsBoolean } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OrderStatus } from '../entities/order.entity';
 import { PaymentMethod } from '@prisma/client';
@@ -33,6 +33,9 @@ export class CreateOrderDto {
 
   @IsEnum(OrderStatus)
   status: OrderStatus;
+
+  @IsBoolean()
+  isDefault: boolean = false;
 
   @IsEnum(PaymentMethod)
   paymentMethod: PaymentMethod;

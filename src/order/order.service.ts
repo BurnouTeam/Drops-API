@@ -8,14 +8,17 @@ import { PrismaService } from '../prisma/prisma.service';
 import { DefaultOrder, Order, Prisma } from '@prisma/client';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { CreateDefaultOrderDto } from './dto/create-default-order.dto';
-import { Client } from 'src/client/entities/client.entity';
 import { OrderStatus } from './entities/order.entity';
+import { WebsocketEventsGateway } from 'src/websocket/websocket.gateway';
 
 @Injectable()
 export class OrderService {
   private readonly logger = new Logger(OrderService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly websocketGateway: WebsocketEventsGateway,
+  ) {}
 
   async order(params: {
     include?: Prisma.OrderInclude;
@@ -112,12 +115,18 @@ export class OrderService {
   }
 
   async createOrder(createOrderDto: CreateOrderDto): Promise<Order> {
-    const { items, clientPhoneNumber, organizationId, paymentMethod } =
-      createOrderDto;
+    const {
+      items,
+      clientPhoneNumber,
+      isDefault,
+      organizationId,
+      paymentMethod,
+    } = createOrderDto;
 
     const order = await this.prisma.$transaction(async (prisma) => {
       const createdOrder = await prisma.order.create({
         data: {
+          default: isDefault,
           totalPrice: 0,
           status: 'pending',
           paymentMethod: paymentMethod,
@@ -131,6 +140,9 @@ export class OrderService {
               phoneNumber: clientPhoneNumber,
             },
           },
+        },
+        include: {
+          client: true,
         },
       });
 
@@ -180,6 +192,9 @@ export class OrderService {
             quantity,
             price: product.price,
           },
+          include: {
+            product: true,
+          },
         });
 
         orderItems.push(orderItem);
@@ -206,6 +221,23 @@ export class OrderService {
         },
       });
 
+      const formattedTime = createdOrder.createdAt.toLocaleTimeString('en-US', {
+        timeZone: 'America/Sao_Paulo',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+
+      this.websocketGateway.sendUpdate({
+        message: 'New order created',
+        data: {
+          ...createdOrder,
+          createdAt: formattedTime,
+          totalPrice,
+          items: orderItems,
+          paymentDetails: paymentDetails,
+        },
+      });
       return {
         ...createdOrder,
         totalPrice,
@@ -270,6 +302,12 @@ export class OrderService {
         },
       });
 
+      this.websocketGateway.sendUpdate({
+        message: 'New order from default created',
+        data: {
+          ...defaultOrder,
+        },
+      });
       return defaultOrder;
     });
   }
@@ -293,7 +331,7 @@ export class OrderService {
       );
     }
 
-    return this.prisma.$transaction(async (prisma) => {
+    const order = this.prisma.$transaction(async (prisma) => {
       // Create DefaultOrder with associated DefaultOrderItems
       const defaultOrder = await prisma.defaultOrder.create({
         data: {
@@ -327,6 +365,13 @@ export class OrderService {
 
       return defaultOrder;
     });
+    this.websocketGateway.sendUpdate({
+      message: 'New order from products created',
+      data: {
+        ...order,
+      },
+    });
+    return order;
   }
 
   async update(params: {
@@ -533,6 +578,7 @@ export class OrderService {
     orderDto.organizationId = organizationId;
     orderDto.status = OrderStatus.pending;
     orderDto.paymentMethod = client.defaultOrder.paymentMethod;
+    orderDto.isDefault = true;
 
     const itemsWithUpdatedPrice = await Promise.all(
       client.defaultOrder.items.map(async (item) => {
@@ -554,8 +600,12 @@ export class OrderService {
     const order = await this.createOrder(orderDto);
 
     if (!order) {
-      throw new BadRequestException('The order could not be created from the default Order');
+      throw new BadRequestException(
+        'The order could not be created from the default Order',
+      );
     }
+
+    return order;
   }
 
   async getDefaultOrderForClient(params: {

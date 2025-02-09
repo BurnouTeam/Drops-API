@@ -20,13 +20,34 @@ headers {
 }
 
 body:json {
+  // Read the docs first 
+  // Expects one of the two ways
+  
+  //1 - A client id, paymentMethod and the items with productid an quantity:
+  
+  //{
+  //  "organizationId":2,
+  //  "clientId":"+5585996105145",
+  //  "items": [
+  //    {
+  //     "productId":21,
+  //      "quantity":3
+  //    }
+  //  ],
+  //  "paymentMethod":"PIX"
+  //}
+  
+  //2 - An organizationId and a orderId so it will copy the order
+  
+  //{ "organizationId":x, "orderId": i}
+  // ACTUAL BODY SENT V
   {
     "organizationId":2,
     "clientId":"+5585996105145",
     "items": [
       {
-        "productId":21,
-        "quantity":3
+        "productId":6,
+        "quantity":10
       }
     ],
     "paymentMethod":"PIX"

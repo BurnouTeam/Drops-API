@@ -68,6 +68,9 @@ export class OrderController {
   ) {
     return this.orderService.findAllOrders({
       where: { organizationId },
+      orderBy: {
+        createdAt: 'desc',
+      },
     });
   }
 

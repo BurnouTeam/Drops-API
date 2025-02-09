@@ -5,13 +5,9 @@ meta {
 }
 
 post {
-  url: {{api_url}}/order/default/:organizationId
+  url: {{api_url}}/order/default/make
   body: json
   auth: none
-}
-
-params:path {
-  organizationId: 
 }
 
 headers {
@@ -22,14 +18,7 @@ headers {
 body:json {
   {
     "organizationId":2,
-    "clientId":"+5585996105145",
-    "items": [
-      {
-        "productId":21,
-        "quantity":3
-      }
-    ],
-    "paymentMethod":"PIX"
+    "clientId":"+5585996105145"
   }
 }
 
