@@ -1,4 +1,16 @@
-import { Expose, Exclude } from 'class-transformer';
+import { Expose, Exclude, Type } from 'class-transformer';
+export class PublicRoleDto {
+  @Expose()
+  id: number;
+  @Expose()
+  name: string;
+  @Exclude()
+  organizationId: number;
+  @Exclude()
+  createdAt: Date;
+  @Exclude()
+  updatedAt: Date;
+}
 
 export class PublicUserDto {
   @Expose()
@@ -13,8 +25,12 @@ export class PublicUserDto {
   @Expose()
   profilePhoto: string;
 
-  @Expose()
+  @Exclude()
   roleId: number;
+
+  @Type(() => PublicRoleDto)
+  @Expose()
+  role: PublicRoleDto;
 
   @Expose()
   organizationId: number;

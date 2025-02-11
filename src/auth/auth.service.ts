@@ -30,6 +30,7 @@ export class AuthService {
       loginUserDto.email,
       loginUserDto.organizationId,
     );
+
     if (
       !user ||
       !(await bcrypt.compare(loginUserDto.password, user.password))
@@ -69,6 +70,9 @@ export class AuthService {
       email: createUserDto.email,
       password: createUserDto.password,
       profilePhoto: createUserDto.profilePhoto,
+      role: {
+        connect: { id: createUserDto.roleId ? createUserDto.roleId : null },
+      },
       organization: {
         connect: { id: createUserDto.organizationId },
       },
@@ -98,7 +102,7 @@ export class AuthService {
       sub: user.id,
       email: user.email,
       orgId: user.organizationId,
-      roleId: user.roleId,
+      role: user.role,
     };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.configService.get('JWT_SECRET'),

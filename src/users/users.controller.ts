@@ -28,6 +28,15 @@ export class UsersController {
     });
   }
 
+  @Get('role/:organizationId')
+  async findAllRoles(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
+    return this.usersService.findRoles({
+      where: { organizationId: organizationId },
+    });
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     return this.usersService.findOne({ id: id });

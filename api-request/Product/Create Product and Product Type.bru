@@ -1,0 +1,44 @@
+meta {
+  name: Create Product and Product Type
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{api_url}}/product
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  User-Agent: insomnia/10.2.0
+}
+
+body:json {
+  {
+    "name": "Água Mineral Lindoya Genuína",
+    "price": 14.90,
+    "quantity": 0,
+    "details": "A água Lindoya Genuína está no mercado desde 1965, fonte de água localizada na cidade de Lindoia, local privilegiado e conhecido por ser o circuito das águas. Fonte eu no longo dos seus mais de 50 anos de mercado, busca dia a dia a perfeição de gualidade e seriedade. Tratando seus produtos como bem maio da vida!",
+    "imageUrl": "",
+    "organizationId": 2,
+    "type": {
+      "name":"20L",
+      "organizationId": 2
+    }
+  }
+}
+
+docs {
+  Expects:
+  
+  {
+    "name": "Água Benta",
+    "price": 10.0,
+    "quantity": 20,
+    "details": "Uma água santa muito boa",
+    "imageUrl": "",
+    "organizationId": 2
+  }
+}

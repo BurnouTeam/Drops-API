@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import { validateOrReject } from 'class-validator';
 
 export class User {
@@ -7,7 +8,9 @@ export class User {
   password: string;
   profilePhoto: string;
   roleId: number;
+  role: Role;
   organizationId: number;
+  refreshToken: string;
 
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);

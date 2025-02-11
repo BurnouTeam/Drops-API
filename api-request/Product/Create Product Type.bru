@@ -5,13 +5,9 @@ meta {
 }
 
 post {
-  url: {{api_url}}/product/:organizationId
+  url: {{api_url}}/product/type
   body: json
   auth: none
-}
-
-params:path {
-  organizationId: 
 }
 
 headers {
@@ -21,16 +17,8 @@ headers {
 
 body:json {
   {
-    "name": "Água Azul",
-    "price": 7.0,
-    "quantity": 15,
-    "details": "Direto da lagoa Azul",
-    "imageUrl": "",
-    "organizationId": 2,
-    "type": {
       "name":"5L",
       "organizationId": 2
-    }
   }
 }
 

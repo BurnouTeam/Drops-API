@@ -32,7 +32,9 @@ export class AuthController {
     res.status(200).send({
       message: result.message,
       accessToken: result.accessToken,
-      user: plainToInstance(PublicUserDto, result.user),
+      user: plainToInstance(PublicUserDto, result.user, {
+        strategy: 'excludeAll',
+      }),
     });
   }
 

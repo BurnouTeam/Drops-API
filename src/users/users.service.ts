@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { User, Prisma } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './users.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +17,9 @@ export class UsersService {
   ): Promise<User | null> {
     return this.prisma.user.findUnique({
       where: userWhereUniqueInput,
+      include: {
+        role: true,
+      },
     });
   }
 
@@ -29,6 +33,9 @@ export class UsersService {
           email: email,
           organizationId: organizationId,
         },
+      },
+      include: {
+        role: true,
       },
     });
   }
@@ -61,12 +68,34 @@ export class UsersService {
     });
   }
 
+  async findRoles(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.RoleWhereUniqueInput;
+    where?: Prisma.RoleWhereInput;
+    orderBy?: Prisma.RoleOrderByWithRelationInput;
+    fields?: string;
+  }): Promise<Partial<Role>[]> {
+    const { skip, take, cursor, where, orderBy, fields } = params;
+
+    return this.prisma.role.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
+  }
+
   async create(data: Prisma.UserCreateInput): Promise<User> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     return this.prisma.user.create({
       data: {
         ...data,
         password: hashedPassword,
+      },
+      include: {
+        role: true,
       },
     });
   }
@@ -77,12 +106,18 @@ export class UsersService {
       data: {
         ...updateUserDto,
       },
+      include: {
+        role: true,
+      },
     });
   }
 
   async delete(id: number): Promise<User> {
     return this.prisma.user.delete({
       where: { id },
+      include: {
+        role: true,
+      },
     });
   }
 }
