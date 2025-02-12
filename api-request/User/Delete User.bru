@@ -1,32 +1,23 @@
 meta {
-  name: Create User of 1 Organization
+  name: Delete User
   type: http
-  seq: 2
+  seq: 5
 }
 
-post {
-  url: {{api_url}}/user/:organizationId
+delete {
+  url: {{api_url}}/user/:organizationId/:id
   body: json
   auth: none
 }
 
 params:path {
-  organizationId: 2
+  organizationId: 
+  id: 
 }
 
 headers {
   Content-Type: application/json
   User-Agent: insomnia/10.2.0
-}
-
-body:json {
-  {
-    "name": "Dante de Araújo",
-    "email": "danteeng@hotmail.com",
-    "password": "drops123456",
-    "roleId": 1,
-    "organizationId": 2
-  }
 }
 
 docs {

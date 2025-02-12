@@ -58,16 +58,27 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: number) {
-    return this.usersService.delete(id);
+  @Delete(':organizationId/:id')
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+  ) {
+    return this.usersService.delete({
+      where:{
+        id,
+        organizationId,
+      },
+    });
   }
 
-  @Post(':organizationId')
+  @Post()
   create(@Body() createUserDto: CreateUserDto): any {
     const input = {
       name: createUserDto.name,
@@ -76,6 +87,9 @@ export class UsersController {
       profilePhoto: createUserDto.profilePhoto,
       organization: {
         connect: { id: createUserDto.organizationId },
+      },
+      role: {
+        connect: { id: createUserDto.roleId },
       },
     };
     return this.usersService.create(input);

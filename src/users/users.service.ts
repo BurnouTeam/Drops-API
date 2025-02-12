@@ -112,9 +112,12 @@ export class UsersService {
     });
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(params: {
+    where?: Prisma.UserWhereUniqueInput;
+  }): Promise<User> {
+    const { where } = params;
     return this.prisma.user.delete({
-      where: { id },
+      where,
       include: {
         role: true,
       },
