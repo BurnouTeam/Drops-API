@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Message, Prisma } from '@prisma/client';
+import { Client, Message, Prisma } from '@prisma/client';
 
 @Injectable()
 export class MessageService {
@@ -34,7 +34,7 @@ export class MessageService {
       cursor,
       where,
       orderBy,
-      select,
+      select: select
     });
   }
 
@@ -59,5 +59,31 @@ export class MessageService {
     return this.prisma.message.delete({
       where,
     });
+  }
+
+  async getClientInfo( where: Prisma.ClientWhereUniqueInput): Promise<Partial<Client>> {
+    return this.prisma.client.findUnique({
+      where
+    });
+  }
+
+  async getLatestMessagesByChat(organizationId: number): Promise<Partial<Message>[]> {
+    return this.prisma.$queryRaw`
+      SELECT
+        m1.*,
+        c.name AS "clientName",
+        c."phoneNumber" AS "clientNumber",
+        c."profilePhoto" AS "clientProfilePhoto"
+      FROM "Message" m1
+      INNER JOIN (
+        SELECT "clientId", MAX("sentAt") AS latestMessageTime
+        FROM "Message"
+        WHERE "organizationId" = ${organizationId}
+        GROUP BY "clientId"
+      ) m2 ON m1."clientId" = m2."clientId" AND m1."sentAt" = m2.latestMessageTime
+      JOIN "Client" c ON m1."clientId" = c."phoneNumber"
+      WHERE m1."organizationId" = ${organizationId}
+      ORDER BY m1."sentAt" DESC;
+    `;
   }
 }

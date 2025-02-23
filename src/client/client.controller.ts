@@ -62,7 +62,7 @@ export class ClientController {
     return this.clientService.client({ phoneNumber, organizationId });
   }
 
-  @Patch(':phoneNumber')
+  @Patch(':organizationId/:phoneNumber')
   update(
     @Param('phoneNumber') phoneNumber: string,
     @Body() updateClientDto: UpdateClientDto,

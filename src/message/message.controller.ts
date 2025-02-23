@@ -58,16 +58,33 @@ export class MessageController {
   }
 
   @Get(':organizationId/chat/:clientPhoneNumber/messages')
-  findAll(
+  async findAllClientMessages(
     @Param('organizationId', ParseIntPipe) organizationId: number,
     @Param('clientPhoneNumber') clientPhoneNumber: string,
     @Query('fields') fields?: string,
   ) {
-    return this.messageService.find({
+    const messages =  await this.messageService.find({
       fields,
       where: { organizationId, clientId: clientPhoneNumber },
       orderBy: { sentAt: 'desc' },
     });
+
+    const client = await this.messageService.getClientInfo(
+      { organizationId, phoneNumber: clientPhoneNumber },
+    )
+
+    return {
+      client,
+      messages
+    }
+  }
+
+  @Get(':organizationId/chat/lastChats')
+  findAllChats(
+    @Param('organizationId', ParseIntPipe) organizationId: number,
+    @Query('fields') fields?: string,
+  ) {
+    return this.messageService.getLatestMessagesByChat(organizationId);
   }
 
   @Patch(':id')
